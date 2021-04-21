@@ -5,6 +5,8 @@ using namespace std;
 //Fecha de Inicio: 18-4-2021
 //Última fecha de modificación: 20-4-2021
 
+//Testing commit
+
 struct administrador { //posible lista simple
     string nombre;
     administrador*sig;
