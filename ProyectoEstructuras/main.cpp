@@ -1,8 +1,9 @@
 #include <iostream>
 using namespace std;
 
-//Fecha de Inicio: 18-4-2021 pd:si quiere ponemos una de antes pa que no quede feo xd
-//Última fecha de modificación: esperemos sea pronta xd
+//Autores: Anthony Arias y Kristel Salas
+//Fecha de Inicio: 18-4-2021
+//Última fecha de modificación: 20-4-2021
 
 struct administrador { //posible lista simple
     string nombre;
