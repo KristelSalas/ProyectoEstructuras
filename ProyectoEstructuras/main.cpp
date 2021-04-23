@@ -68,7 +68,11 @@ struct reuniones { //posible lista simple o doble??
 
 };
 
+
 //Funciones
+
+// ------------ Admins -------------
+
 
 void insertarAdmin(string n, int cA){
     administrador* nn = new administrador(n, cA);
@@ -77,13 +81,8 @@ void insertarAdmin(string n, int cA){
 }
 
 
-void insertarInicioProfesor(string n, int cP){//funcion para insertar profesores a la lista al inicio, recibe toda la info y crea el nodo
-    profesor* nn = new profesor(n,cP);
-    nn->sig = primerP;
-    if(primerP != NULL)
-        primerP->ant = nn;
-    primerP = nn;
-}
+// ------------ Profes -------------
+
 
 profesor* buscarProfe(int carnetP){//función para buscar profesor que recibe por parámetro el carnet único de este y devuelve el objeto
     profesor*temp = primerP;
@@ -93,6 +92,20 @@ profesor* buscarProfe(int carnetP){//función para buscar profesor que recibe por
         temp = temp->sig;
     }
 return NULL;// no lo encontro
+}
+
+void insertarInicioProfesor(string n, int cP){//funcion para insertar profesores a la lista al inicio, recibe toda la info y crea el nodo
+    profesor* buscarProfeRepetido = buscarProfe(cP);
+    if(buscarProfeRepetido == NULL){
+        profesor* nn = new profesor(n,cP);
+        nn->sig = primerP;
+        if(primerP != NULL)
+            primerP->ant = nn;
+        primerP = nn;
+    }
+    else
+        cout << "Este Carnet de profesor ya existe con el nombre de: " << buscarProfeRepetido->nombre << endl;
+
 }
 
 void modificarProfesor(int carnetP, int nc, string nn ){//función para modificar la info del profesor, recibe el carnet del profesor y los datos nuevos a modificar
@@ -105,20 +118,95 @@ void modificarProfesor(int carnetP, int nc, string nn ){//función para modificar
 
 }
 
-void imprimirProfesores(){//esto es nomas para probar luego se puede borrar
-    profesor* temp = primerP;
-    while(temp!= NULL){
-        cout<<temp->nombre <<", " << temp->carnetProfesor << endl;
-        temp = temp->sig;
+void eliminarProfe(int carnetP){
+    profesor* profeBorrar= buscarProfe(carnetP);
+    if(profeBorrar == NULL){
+        cout<<"\nNo se encontro el profesor" << endl;
+    }
+    else{
+        profesor* nodoAnterior = profeBorrar-> ant;
+        profesor* nodoSiguiente = profeBorrar-> sig;
+        if((profeBorrar->ant== NULL) && (profeBorrar->sig==NULL)){
+                primerP = NULL;
+                cout<<"Se elimino el profesor y la lista ha quedado vacia" << endl;
+        }
+        else if(profeBorrar == primerP){
+            primerP = primerP-> sig;
+            primerP-> ant = NULL;
+            cout<<"Se elimino el profesor de la lista" << endl;
+        }
+        else{
+            nodoAnterior->sig = nodoSiguiente;
+            if(nodoSiguiente!=NULL)
+                nodoSiguiente->ant = nodoAnterior;
+            cout<<"Se elimino el profesor de la lista" << endl;
+        }
     }
 }
 
-void insertarEstudiante(string n, int e, int c){//Inserta los estudiantes segun su edad de manera ascendente en el inicio
-    estudiante*nn = new estudiante(n, e, c);
-    estudiante*temp = primerE;
-    nn->sig = primerE;
-    primerE = nn; //ESTA MIERDA NO FUNCIONAAAAAAA O SEA SI PERO NO INSERTA POR EDAD ME CAGO EN SATANAS
+
+
+// ------------ Estudiantes -------------
+
+estudiante* buscarEstudiante(int carnetEst){//función para buscar estudiantes, recibe por parámetro el carnet único de este y devuelve el objeto
+    estudiante* temp = primerE;
+    while(temp!= NULL){
+        if(temp-> carnetE == carnetEst)
+            return temp;
+        temp = temp->sig;
+    }
+return NULL;// no lo encontro
 }
+
+void insertarEstudiante(string n, int e, int c){//Inserta los estudiantes segun su edad de manera ascendente en el inicio
+    estudiante* buscarEstudianteRepetido = buscarEstudiante(c);
+    if(buscarEstudianteRepetido == NULL){
+        estudiante*nn = new estudiante(n, e, c);
+        nn->sig = primerE;
+        primerE = nn;
+    }
+    else
+        cout << "Este estudiante ya existe" << endl;
+}
+
+void modificarEstudiante(int carnetEstu, string nomN, int edadN){
+    estudiante * estudianteCambiar = buscarEstudiante(carnetEstu);
+    if (estudianteCambiar == NULL){
+        cout<<"Estudiante no encontrado" << endl;
+    }
+    else{
+        estudianteCambiar->nombre = nomN;
+        estudianteCambiar->edad = edadN;
+        cout<<"\nEstudiante Modificado con exito" << endl;
+    }
+}
+
+void eliminarestudiante(int carnetEst){
+    if(primerE == NULL){
+        cout <<"\nLista vacía" << endl;
+    }
+    else if(primerE->carnetE == carnetEst){
+        primerE = primerE->sig;
+    }
+    else{
+        estudiante *temp = primerE;
+        estudiante *tempAnt= primerE;
+        while(temp != NULL){
+            if(temp->carnetE == carnetEst){//borrar
+                tempAnt->sig = temp->sig;
+            }
+            tempAnt= temp;
+            temp = temp->sig;
+        }
+        if(temp==NULL){
+            cout<<"Este estudiante no existe" << endl;
+        }
+    }
+}
+
+
+// ------------ Imprimirsh que luego se borran xd -------------
+
 
 void imprimirEstudiantes(){//para imprimir estudiantes se borra luego xd
     estudiante *temp = primerE;
@@ -137,6 +225,15 @@ void imprimirAdmins(){//para imprimir admins se borra luego xd
         temp = temp->sig;
     }
 }
+
+void imprimirProfesores(){//esto es nomas para probar luego se puede borrar
+    profesor* temp = primerP;
+    while(temp!= NULL){
+        cout<<temp->nombre <<", " << temp->carnetProfesor << endl;
+        temp = temp->sig;
+    }
+}
+
 
 // "frontend"
 
@@ -219,13 +316,34 @@ return;
 
 int main()
 {
+    cout << " --- profes --- " << endl;
     insertarInicioProfesor("Laura", 2021);
+    //insertarInicioProfesor("Oscar", 2021);
+    //insertarInicioProfesor("Oscar", 2027);
+    //insertarInicioProfesor("Mario", 2309);
     imprimirProfesores();
+    cout << endl << "Cambiiooosss" << endl;
+    eliminarProfe(2021);
+    imprimirProfesores();
+
+
+    cout << endl << " --- Admins --- " << endl;
     insertarAdmin("Paulo", 2021);
     imprimirAdmins();
+
+    //La insercion de estudiantes de esta haciendo al inicio pero tiene que ser ordenada por algun parametro y no logro hacerlo help
+    cout << endl << " --- estudiantes --- " << endl;
     insertarEstudiante("Vanessa", 15, 2020);
     insertarEstudiante("Alonso", 18, 2021);
+    insertarEstudiante("Vanessa", 15, 2020);
     imprimirEstudiantes();
+    modificarEstudiante(2021, "Pepe", 19);
+    imprimirEstudiantes();
+
+    cout << endl << "Cambiiooosss" << endl;
+    eliminarestudiante(2021);
+    imprimirEstudiantes();
+
     //menu();
 
 }
