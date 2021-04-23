@@ -85,7 +85,7 @@ return NULL;// no lo encontro
 
 void modificarProfesor(int carnetP, int nc, string nn ){
     profesor* nodoBuscado= buscar(carnetP);
-    if(nodoBuscado== NULL)
+    if(nodoBuscado == NULL)
         cout<<"No encontrado, no se puede modificar";
     else
         nodoBuscado->nombre = nn;
@@ -101,11 +101,93 @@ void imprimirProfesores(){//esto es nomas para probar luego se puede borrar
     }
 }
 
+
+// "frontend"
+
+void menuAdmi(){
+ cout << "1" <<endl;
+ return;
+}
+
+void menuProf(){
+
+int carnetP;
+bool validacion = false;
+while (validacion != true){
+    cout << "\nPor favor ingrese su identificacion o digite 0 para volver\n-------------------------------------" << endl;
+    cin >> carnetP;
+
+    if (carnetP != 0){
+        profesor* nodoBuscado = buscar(carnetP);
+        if(nodoBuscado == NULL)
+        cout<<"\nERROR: El usuario no es valido\n";
+        else {
+            validacion = true;
+            int opcion = -1;
+            while (opcion != 0){
+            cout << "\nBienvenido! \n-------------------------------------\n1- Consultar reuniones\n2- Consultar asitencia por reunionP\n3- Consultar cuales estudiantes asistieron a todas las reuniones\n0- Para salir\n-------------------------------------" << endl;
+            cin >> opcion;
+            switch(opcion){
+                case 1:
+                    //consultarReuniones();
+                    break;
+                case 2:
+                    //consultarAsistenciaPorReu();
+                    break;
+                case 3:
+                    //consultarAsitenciaTodasReu();
+                    break;
+                case 0:
+                    //consultarTresAusencias();
+                    break;
+                default:
+                    cout << "\nERROR: El valor no es valido\n" << endl;
+                }
+            }
+        }
+    }
+    break;
+}
+return;
+}
+
+void menuEstu(){
+cout << "2" <<endl;
+return;
+}
+
+
+void menu(){
+int opcion = -1;
+while (opcion != 0){
+  cout << "\nPor Favor, seleccione el tipo de usuario \n-------------------------------------\n1- Administrador\n2- Profesor\n3- Estudiante\n0- Para salir\n-------------------------------------" << endl;
+  cin >> opcion;
+  switch(opcion){
+    case 1:
+        menuAdmi();
+        break;
+    case 2:
+        menuProf();
+        break;
+    case 3:
+        menuEstu();
+        break;
+    case 0:
+        break;
+    default:
+        cout << "\nERROR: El valor no es valido\n" << endl;
+    }
+}
+return;
+}
+
 int main()
 {
+
     insertarInicioProfesor("Paolo", 2020);
     imprimirProfesores();
-    modificarProfesor(2020, 2021, "Paula");
-    imprimirProfesores();
+    menu();
+    //modificarProfesor(2020, 2021, "Paula");
+    //imprimirProfesores();
 
 }
