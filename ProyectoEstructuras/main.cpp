@@ -3,19 +3,22 @@ using namespace std;
 
 //Autores: Anthony Arias y Kristel Salas
 //Fecha de Inicio: 18-4-2021
-//Última fecha de modificación: 20-4-2021
+//Última fecha de modificación: 22-4-2021
 
-//Testing commit
+
+//Constructores pd: necesito que me diga qué más atributos le puedo poner a cada uno xd
 
 struct administrador { //posible lista simple
     string nombre;
+    int claveAdmin;
     administrador*sig;
 
-    administrador(string n){
+    administrador(string n, int cA){
         nombre = n;
+        claveAdmin = cA;
         sig = NULL;
     }
-};
+}*primerA;
 
 struct profesor { //Lista doble con inserción al inicio
     string nombre;
@@ -43,7 +46,7 @@ struct estudiante { //lista simple con insercion ordenada de lo que queramos, qu
         carnetE = ce;
         sig = NULL;
     }
-};
+}*primerE;
 
 struct curso { // lista circular con insercion al final
     string nombre;
@@ -65,7 +68,16 @@ struct reuniones { //posible lista simple o doble??
 
 };
 
-void insertarInicioProfesor(string n, int cP){
+//Funciones
+
+void insertarAdmin(string n, int cA){
+    administrador* nn = new administrador(n, cA);
+    nn->sig = primerA;
+    primerA = nn;
+}
+
+
+void insertarInicioProfesor(string n, int cP){//funcion para insertar profesores a la lista al inicio, recibe toda la info y crea el nodo
     profesor* nn = new profesor(n,cP);
     nn->sig = primerP;
     if(primerP != NULL)
@@ -73,7 +85,7 @@ void insertarInicioProfesor(string n, int cP){
     primerP = nn;
 }
 
-profesor* buscar(int carnetP){//no hecho aun
+profesor* buscarProfe(int carnetP){//función para buscar profesor que recibe por parámetro el carnet único de este y devuelve el objeto
     profesor*temp = primerP;
     while(temp!= NULL){
         if(temp->carnetProfesor == carnetP)
@@ -83,8 +95,8 @@ profesor* buscar(int carnetP){//no hecho aun
 return NULL;// no lo encontro
 }
 
-void modificarProfesor(int carnetP, int nc, string nn ){
-    profesor* nodoBuscado= buscar(carnetP);
+void modificarProfesor(int carnetP, int nc, string nn ){//función para modificar la info del profesor, recibe el carnet del profesor y los datos nuevos a modificar
+    profesor* nodoBuscado= buscarProfe(carnetP);
     if(nodoBuscado == NULL)
         cout<<"No encontrado, no se puede modificar";
     else
@@ -101,6 +113,30 @@ void imprimirProfesores(){//esto es nomas para probar luego se puede borrar
     }
 }
 
+void insertarEstudiante(string n, int e, int c){//Inserta los estudiantes segun su edad de manera ascendente en el inicio
+    estudiante*nn = new estudiante(n, e, c);
+    estudiante*temp = primerE;
+    nn->sig = primerE;
+    primerE = nn; //ESTA MIERDA NO FUNCIONAAAAAAA O SEA SI PERO NO INSERTA POR EDAD ME CAGO EN SATANAS
+}
+
+void imprimirEstudiantes(){//para imprimir estudiantes se borra luego xd
+    estudiante *temp = primerE;
+    if (temp == NULL)
+        cout << "lista vaciaaa";
+    while(temp != NULL){
+        cout<<temp-> nombre <<", " << temp-> edad <<", " << temp-> carnetE<< endl;
+        temp = temp->sig;
+    }
+}
+
+void imprimirAdmins(){//para imprimir admins se borra luego xd
+    administrador *temp = primerA;
+    while(temp != NULL){
+        cout<<temp-> nombre <<", " << temp-> claveAdmin << endl;
+        temp = temp->sig;
+    }
+}
 
 // "frontend"
 
@@ -118,7 +154,7 @@ while (validacion != true){
     cin >> carnetP;
 
     if (carnetP != 0){
-        profesor* nodoBuscado = buscar(carnetP);
+        profesor* nodoBuscado = buscarProfe(carnetP);
         if(nodoBuscado == NULL)
         cout<<"\nERROR: El usuario no es valido\n";
         else {
@@ -183,11 +219,13 @@ return;
 
 int main()
 {
-
-    insertarInicioProfesor("Paolo", 2020);
+    insertarInicioProfesor("Laura", 2021);
     imprimirProfesores();
-    menu();
-    //modificarProfesor(2020, 2021, "Paula");
-    //imprimirProfesores();
+    insertarAdmin("Paulo", 2021);
+    imprimirAdmins();
+    insertarEstudiante("Vanessa", 15, 2020);
+    insertarEstudiante("Alonso", 18, 2021);
+    imprimirEstudiantes();
+    //menu();
 
 }
