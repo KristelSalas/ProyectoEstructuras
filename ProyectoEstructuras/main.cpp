@@ -1,12 +1,13 @@
 #include <iostream>
+#include<stdlib.h>
 using namespace std;
 
 //Autores: Anthony Arias y Kristel Salas
 //Fecha de Inicio: 18-4-2021
-//Última fecha de modificación: 22-4-2021
+//Ãšltima fecha de modificaciÃ³n: 23-4-2021
 
 
-//Constructores pd: necesito que me diga qué más atributos le puedo poner a cada uno xd
+//Constructores pd: necesito que me diga quÃ© mÃ¡s atributos le puedo poner a cada uno xd
 
 struct administrador { //posible lista simple
     string nombre;
@@ -20,7 +21,7 @@ struct administrador { //posible lista simple
     }
 }*primerA;
 
-struct profesor { //Lista doble con inserción al inicio
+struct profesor { //Lista doble con inserciÃ³n al inicio
     string nombre;
     int carnetProfesor;
     profesor* sig;
@@ -34,7 +35,7 @@ struct profesor { //Lista doble con inserción al inicio
     }
 }*primerP;
 
-struct estudiante { //lista simple con insercion ordenada de lo que queramos, qué usamos?? xd
+struct estudiante { //lista simple con insercion ordenada de lo que queramos, quÃ© usamos?? xd
     string nombre;
     int edad;
     int carnetE;
@@ -80,11 +81,21 @@ void insertarAdmin(string n, int cA){
     primerA = nn;
 }
 
+administrador* buscarAdmin(int claveA){//funciÃ³n para buscar admins que recibe por parÃ¡metro el carnet Ãºnico de este y devuelve el objeto
+    administrador*temp = primerA;
+    while(temp!= NULL){
+        if(temp->claveAdmin == claveA)
+            return temp;
+        temp = temp->sig;
+    }
+return NULL;// no lo encontro
+}
+
 
 // ------------ Profes -------------
 
 
-profesor* buscarProfe(int carnetP){//función para buscar profesor que recibe por parámetro el carnet único de este y devuelve el objeto
+profesor* buscarProfe(int carnetP){//funciÃ³n para buscar profesor que recibe por parÃ¡metro el carnet Ãºnico de este y devuelve el objeto
     profesor*temp = primerP;
     while(temp!= NULL){
         if(temp->carnetProfesor == carnetP)
@@ -108,7 +119,7 @@ void insertarInicioProfesor(string n, int cP){//funcion para insertar profesores
 
 }
 
-void modificarProfesor(int carnetP, int nc, string nn ){//función para modificar la info del profesor, recibe el carnet del profesor y los datos nuevos a modificar
+void modificarProfesor(int carnetP, int nc, string nn ){//funciÃ³n para modificar la info del profesor, recibe el carnet del profesor y los datos nuevos a modificar
     profesor* nodoBuscado= buscarProfe(carnetP);
     if(nodoBuscado == NULL)
         cout<<"No encontrado, no se puede modificar";
@@ -148,7 +159,7 @@ void eliminarProfe(int carnetP){
 
 // ------------ Estudiantes -------------
 
-estudiante* buscarEstudiante(int carnetEst){//función para buscar estudiantes, recibe por parámetro el carnet único de este y devuelve el objeto
+estudiante* buscarEstudiante(int carnetEst){//funciÃ³n para buscar estudiantes, recibe por parÃ¡metro el carnet Ãºnico de este y devuelve el objeto
     estudiante* temp = primerE;
     while(temp!= NULL){
         if(temp-> carnetE == carnetEst)
@@ -183,7 +194,7 @@ void modificarEstudiante(int carnetEstu, string nomN, int edadN){
 
 void eliminarestudiante(int carnetEst){
     if(primerE == NULL){
-        cout <<"\nLista vacía" << endl;
+        cout <<"\nLista vacÃ­a" << endl;
     }
     else if(primerE->carnetE == carnetEst){
         primerE = primerE->sig;
@@ -237,13 +248,70 @@ void imprimirProfesores(){//esto es nomas para probar luego se puede borrar
 
 // "frontend"
 
+// Menu para gestionar el crear, modificar y eliminar tanto de estudiantes, como profesores y cursos SIN TERMINAR
+void menuGestion(string elemento){
+cout << elemento << endl;
+
+
+return;
+}
+
+//menu que se muestra cuando se ingresa como usuario de tipo administrador
+
 void menuAdmi(){
- cout << "1" <<endl;
+ system("cls");
+int claveAd;
+bool validacion = false;
+while (validacion != true){
+    cout << "\nPor favor ingrese su clave o digite 0 para volver\n-------------------------------------" << endl;
+    cin >> claveAd;
+
+    if (claveAd != 0){
+        administrador* nodoBuscado = buscarAdmin(claveAd);
+        if(nodoBuscado == NULL){
+        system("cls");
+        cout<<"\nERROR: El usuario no es valido\n";
+        }
+        else {
+            validacion = true;
+            int opcion = -1;
+            while (opcion != 0){
+            system("cls");
+            cout << "\nBienvenid@ " << nodoBuscado->nombre << "\n-------------------------------------\n\n1- Gestionar estudiantes\n2- Gestionar profesores\n3- Gestionar cursos\n0- Para salir\n-------------------------------------" << endl;
+            cin >> opcion;
+            switch(opcion){
+                case 1:
+                    menuGestion("Estudiantes");
+                    break;
+                case 2:
+                    menuGestion("Profesores");
+                    break;
+                case 3:
+                    menuGestion("Cursos");
+                    break;
+                case 0:
+                    break;
+                default:
+                    cout << "\nERROR: El valor no es valido\n" << endl;
+                }
+            }
+        break;
+        }
+    }
+    else{
+        system("cls");
+        break;
+    }
+
+}
+
  return;
 }
 
+//menu que se muestra cuando se ingresa como usuario de tipo profesor
 void menuProf(){
 
+system("cls");
 int carnetP;
 bool validacion = false;
 while (validacion != true){
@@ -252,13 +320,16 @@ while (validacion != true){
 
     if (carnetP != 0){
         profesor* nodoBuscado = buscarProfe(carnetP);
-        if(nodoBuscado == NULL)
+        if(nodoBuscado == NULL){
+        system("cls");
         cout<<"\nERROR: El usuario no es valido\n";
+        }
         else {
             validacion = true;
             int opcion = -1;
             while (opcion != 0){
-            cout << "\nBienvenido! \n-------------------------------------\n1- Consultar reuniones\n2- Consultar asitencia por reunionP\n3- Consultar cuales estudiantes asistieron a todas las reuniones\n0- Para salir\n-------------------------------------" << endl;
+            system("cls");
+            cout << "\nBienvenid@ " << nodoBuscado->nombre << "\n\n1- Consultar reuniones\n2- Consultar asitencia por reunion\n3- Consultar cuales estudiantes asistieron a todas las reuniones\n4- Consultar estudiantes con mas de 3 ausencias\n5- Consultar reuniones sin asistencia\n0- Para salir\n-------------------------------------" << endl;
             cin >> opcion;
             switch(opcion){
                 case 1:
@@ -270,21 +341,33 @@ while (validacion != true){
                 case 3:
                     //consultarAsitenciaTodasReu();
                     break;
-                case 0:
+                case 4:
+                    //consultarReuSinAsis();
+                    break;
+                case 5:
                     //consultarTresAusencias();
+                    break;
+                case 0:
                     break;
                 default:
                     cout << "\nERROR: El valor no es valido\n" << endl;
                 }
             }
+        break;
         }
     }
-    break;
+    else{
+        system("cls");
+        break;
+    }
+    
 }
 return;
 }
 
+//menu que se muestra cuando se ingresa como usuario de tipo estudiante SIN TERMINAR
 void menuEstu(){
+system("cls");
 cout << "2" <<endl;
 return;
 }
@@ -293,6 +376,7 @@ return;
 void menu(){
 int opcion = -1;
 while (opcion != 0){
+  system("cls");
   cout << "\nPor Favor, seleccione el tipo de usuario \n-------------------------------------\n1- Administrador\n2- Profesor\n3- Estudiante\n0- Para salir\n-------------------------------------" << endl;
   cin >> opcion;
   switch(opcion){
