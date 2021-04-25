@@ -113,44 +113,45 @@ void insertarInicioProfesor(string n, int cP){//funcion para insertar profesores
         if(primerP != NULL)
             primerP->ant = nn;
         primerP = nn;
+        cout << "** Profesor creado con exito **" << endl;
     }
     else
-        cout << "Este Carnet de profesor ya existe con el nombre de: " << buscarProfeRepetido->nombre << endl;
+        cout << "** Este Carnet de profesor ya existe con el nombre de: " << buscarProfeRepetido->nombre << " **" << endl;
 
 }
 
-void modificarProfesor(int carnetP, int nc, string nn ){//función para modificar la info del profesor, recibe el carnet del profesor y los datos nuevos a modificar
+void modificarProfesor(int carnetP, string nn ){//función para modificar la info del profesor, recibe el carnet del profesor y los datos nuevos a modificar
     profesor* nodoBuscado= buscarProfe(carnetP);
     if(nodoBuscado == NULL)
-        cout<<"No encontrado, no se puede modificar";
+        cout<<"** No encontrado, no se puede modificar **";
     else
         nodoBuscado->nombre = nn;
-        nodoBuscado->carnetProfesor = nc;
+
 
 }
 
 void eliminarProfe(int carnetP){
     profesor* profeBorrar= buscarProfe(carnetP);
     if(profeBorrar == NULL){
-        cout<<"\nNo se encontro el profesor" << endl;
+        cout<<"** No se encontro el profesor **" << endl;
     }
     else{
         profesor* nodoAnterior = profeBorrar-> ant;
         profesor* nodoSiguiente = profeBorrar-> sig;
         if((profeBorrar->ant== NULL) && (profeBorrar->sig==NULL)){
                 primerP = NULL;
-                cout<<"Se elimino el profesor y la lista ha quedado vacia" << endl;
+                cout<<"** Se elimino el profesor y la lista ha quedado vacia **" << endl;
         }
         else if(profeBorrar == primerP){
             primerP = primerP-> sig;
             primerP-> ant = NULL;
-            cout<<"Se elimino el profesor de la lista" << endl;
+            cout<<"** Se elimino el profesor de la lista" << endl;
         }
         else{
             nodoAnterior->sig = nodoSiguiente;
             if(nodoSiguiente!=NULL)
                 nodoSiguiente->ant = nodoAnterior;
-            cout<<"Se elimino el profesor de la lista" << endl;
+            cout<<"** Se elimino el profesor de la lista **" << endl;
         }
     }
 }
@@ -175,26 +176,27 @@ void insertarEstudiante(string n, int e, int c){//Inserta los estudiantes segun 
         estudiante*nn = new estudiante(n, e, c);
         nn->sig = primerE;
         primerE = nn;
+        cout << "** Estudiante creado con exito **" << endl;
     }
     else
-        cout << "Este estudiante ya existe" << endl;
+        cout << "** Este carnet ya existe **" << endl;
 }
 
 void modificarEstudiante(int carnetEstu, string nomN, int edadN){
     estudiante * estudianteCambiar = buscarEstudiante(carnetEstu);
     if (estudianteCambiar == NULL){
-        cout<<"Estudiante no encontrado" << endl;
+        cout<<"** Estudiante no encontrado **" << endl;
     }
     else{
         estudianteCambiar->nombre = nomN;
         estudianteCambiar->edad = edadN;
-        cout<<"\nEstudiante Modificado con exito" << endl;
+        cout<<"** Estudiante Modificado con exito **" << endl;
     }
 }
 
 void eliminarestudiante(int carnetEst){
     if(primerE == NULL){
-        cout <<"\nLista vacía" << endl;
+        cout <<"ERROR: Lista vacia" << endl;
     }
     else if(primerE->carnetE == carnetEst){
         primerE = primerE->sig;
@@ -210,7 +212,7 @@ void eliminarestudiante(int carnetEst){
             temp = temp->sig;
         }
         if(temp==NULL){
-            cout<<"Este estudiante no existe" << endl;
+            cout<<"ERROR: Este estudiante no existe" << endl;
         }
     }
 }
@@ -222,7 +224,7 @@ void eliminarestudiante(int carnetEst){
 void imprimirEstudiantes(){//para imprimir estudiantes se borra luego xd
     estudiante *temp = primerE;
     if (temp == NULL)
-        cout << "lista vaciaaa";
+        cout << "ERROR: Lista vacia";
     while(temp != NULL){
         cout<<temp-> nombre <<", " << temp-> edad <<", " << temp-> carnetE<< endl;
         temp = temp->sig;
@@ -248,16 +250,163 @@ void imprimirProfesores(){//esto es nomas para probar luego se puede borrar
 
 // "frontend"
 
-// Menu para gestionar el crear, modificar y eliminar tanto de estudiantes, como profesores y cursos SIN TERMINAR
+// Menu para gestionar el crear, modificar y eliminar tanto de estudiantes, como profesores y cursos ** SIN TERMINAR **
 void menuGestion(string elemento){
-cout << elemento << endl;
+system("cls");
+int opcion = -1;
+while (opcion != 0){
+
+    cout << "\nGestion de " << elemento << "\n-------------------------------------\n1- Crear " << elemento << " \n2- Modificar " << elemento << " \n3- Eliminar " << elemento << "\n0- Para Salir\n-------------------------------------"  << endl;
+    cin >> opcion;
+
+    switch (opcion){
+        //------------------------- CREAR -------------------------
+        case 1:
+            system("cls");
+            if (elemento == "Estudiantes"){
+                string nombre;
+                int edad;
+                int carnet;
+                cout << "Ingrese el nombre de el/la estudiante\n-------------------------------------" << endl;
+                cin >> nombre;
+                system("cls");
+                cout << "Ingrese la edad de el/la estudiante\n-------------------------------------" << endl;
+                cin >> edad;
+                system("cls");
+                cout << "Ingrese el carnet de el/la estudiante\n-------------------------------------" << endl;
+                cin >> carnet;
+                system("cls");
+
+                insertarEstudiante(nombre, edad, carnet);
+            }
+            else if (elemento == "Profesores"){
+                string nombre;
+                int carnet;
+                cout << "Ingrese el nombre de el/la profesor(a)\n-------------------------------------" << endl;
+                cin >> nombre;
+                system("cls");
+;
+                cout << "Ingrese el carnet de el/la  profesor(a)\n-------------------------------------" << endl;
+                cin >> carnet;
+                system("cls");
+
+                insertarInicioProfesor(nombre, carnet);
+            }
+            else {
+                string nombre;
+                string codigo;
+                int creditos;
+                cout << "Ingrese el nombre del curso\n-------------------------------------" << endl;
+                cin >> nombre;
+                system("cls");
+                cout << "Ingrese el codigo del curso\n-------------------------------------" << endl;
+                cin >> codigo;
+                system("cls");
+                cout << "Ingrese la cantidad de creditos del curso\n-------------------------------------" << endl;
+                cin >> creditos;
+                system("cls");
+
+                //insertarCurso(nombre, codigo, creditos);
+
+            }
+            break;
+        //------------------------- MODIFICAR -------------------------
+        case 2:
+            system("cls");
+            if (elemento == "Estudiantes"){
+                string nombreN;
+                int edadN;
+                int carnet;
+                cout << "Ingrese el carnet de el/la estudiante\n-------------------------------------" << endl;
+                cin >> carnet;
+                system("cls");
+                cout << "Ingrese el nombre nuevo de el/la estudiante\n-------------------------------------" << endl;
+                cin >> nombreN;
+                system("cls");
+                cout << "Ingrese la edad nueva de el/la estudiante\n-------------------------------------" << endl;
+                cin >> edadN;
+                system("cls");
+
+                modificarEstudiante(carnet, nombreN, edadN);
+            }
+            else if (elemento == "Profesores"){
+                string nombreN;
+                int carnet;
+                cout << "Ingrese el carnet de el/la  profesor(a)\n-------------------------------------" << endl;
+                cin >> carnet;
+                system("cls");
+                cout << "Ingrese el nombre nuevo de el/la profesor(a)\n-------------------------------------" << endl;
+                cin >> nombreN;
+                system("cls");
+
+                modificarProfesor(carnet, nombreN);
+            }
+            else {
+                //---------------- ACA VA EL MODIFICAR CURSO
+                //string nombre;
+                //string codigo;
+                //int creditos;
+                //cout << "Ingrese el nombre del curso\n-------------------------------------" << endl;
+                //cin >> nombre;
+                //system("cls");
+                //cout << "Ingrese el codigo del curso\n-------------------------------------" << endl;
+                //cin >> codigo;
+                //system("cls");
+                //cout << "Ingrese la cantidad de creditos del curso\n-------------------------------------" << endl;
+                //cin >> creditos;
+                //system("cls");
+
+                //modificarCurso(nombre, codigo, creditos);;
+
+            }
+            break;
+        //------------------------- ELIMINAR -------------------------
+        case 3:
+            system("cls");
+            if (elemento == "Estudiantes"){
+                int carnet;
+                cout << "Ingrese el carnet de el/la estudiante\n-------------------------------------" << endl;
+                cin >> carnet;
+                system("cls");
+
+                eliminarestudiante(carnet);
+            }
+            else if (elemento == "Profesores"){
+                int carnet;
+                cout << "Ingrese el carnet de el/la  profesor(a)\n-------------------------------------" << endl;
+                cin >> carnet;
+                system("cls");
+
+                eliminarProfe(carnet);
+            }
+            else {
+
+                //---------------- ACA VA EL ELIMINAR CURSO
+                //string nombre;
+                //string codigo;
+                //int creditos;
+                //cout << "Ingrese el nombre del curso\n-------------------------------------" << endl;
+                //cin >> nombre;
+                //system("cls");
+                //cout << "Ingrese el codigo del curso\n-------------------------------------" << endl;
+                //cin >> codigo;
+                //system("cls");
+                //cout << "Ingrese la cantidad de creditos del curso\n-------------------------------------" << endl;
+                //cin >> creditos;
+                //system("cls");
+
+                //modificarCurso(nombre, codigo, creditos);
+
+            }
+            break;
 
 
+    }
+}
 return;
 }
 
 //menu que se muestra cuando se ingresa como usuario de tipo administrador
-
 void menuAdmi(){
  system("cls");
 int claveAd;
@@ -277,7 +426,7 @@ while (validacion != true){
             int opcion = -1;
             while (opcion != 0){
             system("cls");
-            cout << "\nBienvenid@ " << nodoBuscado->nombre << "\n-------------------------------------\n\n1- Gestionar estudiantes\n2- Gestionar profesores\n3- Gestionar cursos\n0- Para salir\n-------------------------------------" << endl;
+            cout << "\nBienvenid@ " << nodoBuscado->nombre << "\n-------------------------------------\n1- Gestionar estudiantes\n2- Gestionar profesores\n3- Gestionar cursos\n0- Para salir\n-------------------------------------" << endl;
             cin >> opcion;
             switch(opcion){
                 case 1:
@@ -329,7 +478,7 @@ while (validacion != true){
             int opcion = -1;
             while (opcion != 0){
             system("cls");
-            cout << "\nBienvenid@ " << nodoBuscado->nombre << "\n\n1- Consultar reuniones\n2- Consultar asitencia por reunion\n3- Consultar cuales estudiantes asistieron a todas las reuniones\n4- Consultar estudiantes con mas de 3 ausencias\n5- Consultar reuniones sin asistencia\n0- Para salir\n-------------------------------------" << endl;
+            cout << "\nBienvenid@ " << nodoBuscado->nombre << "\n-------------------------------------\n1- Consultar reuniones\n2- Consultar asitencia por reunion\n3- Consultar cuales estudiantes asistieron a todas las reuniones\n4- Consultar estudiantes con mas de 3 ausencias\n5- Consultar reuniones sin asistencia\n0- Para salir\n-------------------------------------" << endl;
             cin >> opcion;
             switch(opcion){
                 case 1:
@@ -360,15 +509,53 @@ while (validacion != true){
         system("cls");
         break;
     }
-    
+
 }
 return;
 }
 
-//menu que se muestra cuando se ingresa como usuario de tipo estudiante SIN TERMINAR
+//menu que se muestra cuando se ingresa como usuario de tipo estudiante
 void menuEstu(){
 system("cls");
-cout << "2" <<endl;
+int carnetE;
+bool validacion = false;
+while (validacion != true){
+    cout << "\nPor favor ingrese su identificacion o digite 0 para volver\n-------------------------------------" << endl;
+    cin >> carnetE;
+
+    if (carnetE != 0){
+        estudiante* nodoBuscado = buscarEstudiante(carnetE);
+        if(nodoBuscado == NULL){
+        system("cls");
+        cout<<"\nERROR: El usuario no es valido\n";
+        }
+        else {
+            validacion = true;
+            int opcion = -1;
+            while (opcion != 0){
+            system("cls");
+            cout << "\nBienvenid@ " << nodoBuscado->nombre << "\n-------------------------------------\n1- Consultar reuniones de la semana\n0- Para salir\n-------------------------------------" << endl;
+            cin >> opcion;
+            switch(opcion){
+                case 1:
+                    //consultarReunionesSemana();
+                    break;
+
+                case 0:
+                    break;
+                default:
+                    cout << "\nERROR: El valor no es valido\n" << endl;
+                }
+            }
+        break;
+        }
+    }
+    else{
+        system("cls");
+        break;
+    }
+
+}
 return;
 }
 
@@ -405,29 +592,29 @@ int main()
     //insertarInicioProfesor("Oscar", 2021);
     //insertarInicioProfesor("Oscar", 2027);
     //insertarInicioProfesor("Mario", 2309);
-    imprimirProfesores();
-    cout << endl << "Cambiiooosss" << endl;
-    eliminarProfe(2021);
-    imprimirProfesores();
+    //imprimirProfesores();
+    //cout << endl << "Cambiiooosss" << endl;
+    //eliminarProfe(2021);
+    //imprimirProfesores();
 
 
-    cout << endl << " --- Admins --- " << endl;
+    //cout << endl << " --- Admins --- " << endl;
     insertarAdmin("Paulo", 2021);
-    imprimirAdmins();
+    //imprimirAdmins();
 
     //La insercion de estudiantes de esta haciendo al inicio pero tiene que ser ordenada por algun parametro y no logro hacerlo help
-    cout << endl << " --- estudiantes --- " << endl;
+    //cout << endl << " --- estudiantes --- " << endl;
     insertarEstudiante("Vanessa", 15, 2020);
-    insertarEstudiante("Alonso", 18, 2021);
-    insertarEstudiante("Vanessa", 15, 2020);
-    imprimirEstudiantes();
-    modificarEstudiante(2021, "Pepe", 19);
-    imprimirEstudiantes();
+    //insertarEstudiante("Alonso", 18, 2021);
+    //insertarEstudiante("Vanessa", 15, 2020);
+    //imprimirEstudiantes();
+    //modificarEstudiante(2021, "Pepe", 19);
+    //imprimirEstudiantes();
 
-    cout << endl << "Cambiiooosss" << endl;
-    eliminarestudiante(2021);
-    imprimirEstudiantes();
+    //cout << endl << "Cambiiooosss" << endl;
+    //eliminarestudiante(2021);
+    //imprimirEstudiantes();
 
-    //menu();
+    menu();
 
 }
