@@ -1,6 +1,7 @@
 # depslib dependency file v1.0
-1619208438 source:c:\users\kristel salas\documents\github\proyectoestructuras\proyectoestructuras\main.cpp
+1619365969 source:c:\users\kristel salas\documents\github\proyectoestructuras\proyectoestructuras\main.cpp
 	<iostream>
+	<stdlib.h>
 
 1619316896 source:c:\users\antho\onedrive\documentos\github\proyectoestructuras\proyectoestructuras\main.cpp
 	<iostream>

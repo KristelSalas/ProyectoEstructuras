@@ -7,15 +7,17 @@ using namespace std;
 //Última fecha de modificación: 23-4-2021
 
 
-//Constructores pd: necesito que me diga qué más atributos le puedo poner a cada uno xd
+//Constructores
 
-struct administrador { //posible lista simple
+struct administrador { //lista simple
     string nombre;
+    string apellido;
     int claveAdmin;
     administrador*sig;
 
-    administrador(string n, int cA){
+    administrador(string n, string aP, int cA){
         nombre = n;
+        apellido = aP;
         claveAdmin = cA;
         sig = NULL;
     }
@@ -23,12 +25,14 @@ struct administrador { //posible lista simple
 
 struct profesor { //Lista doble con inserción al inicio
     string nombre;
+    string apellido;
     int carnetProfesor;
     profesor* sig;
     profesor* ant;
 
-    profesor(string n, int cP){
+    profesor(string n, string aP, int cP){
         nombre = n;
+        apellido = aP;
         carnetProfesor = cP;
         sig = NULL;
         ant = NULL;
@@ -61,25 +65,29 @@ struct curso { // lista circular con insercion al final
         creditos = cre;
         sig = NULL;
     }
-};
+}*primerC;
 
-struct reuniones { //posible lista simple o doble??
+struct reunion { //lista simple
+    int idReunion;
+    string fecha;
+    string horaInicio;
+    string horaFinal;
+    reunion*sig;
 
-
-
-};
+    reunion(int idR, string fe, string horaIn, string horaFi){
+        idReunion = idR;
+        fecha = fe;
+        horaInicio = horaIn;
+        horaFinal = horaFi;
+        sig = NULL;
+    }
+}*primerR;
 
 
 //Funciones
 
 // ------------ Admins -------------
 
-
-void insertarAdmin(string n, int cA){
-    administrador* nn = new administrador(n, cA);
-    nn->sig = primerA;
-    primerA = nn;
-}
 
 administrador* buscarAdmin(int claveA){//función para buscar admins que recibe por parámetro el carnet único de este y devuelve el objeto
     administrador*temp = primerA;
@@ -90,6 +98,19 @@ administrador* buscarAdmin(int claveA){//función para buscar admins que recibe 
     }
 return NULL;// no lo encontro
 }
+
+void insertarAdmin(string n, string aP, int cA){
+    administrador *buscarAdminRepetido = buscarAdmin(cA);
+    if(buscarAdminRepetido == NULL){
+        administrador* nn = new administrador(n, aP, cA);
+        nn->sig = primerA;
+        primerA = nn;
+    }
+    else
+        cout << "** Esta clave de Administrador ya existe con el nombre de: " << buscarAdminRepetido-> nombre << " **" << endl;
+}
+
+
 
 
 // ------------ Profes -------------
@@ -105,10 +126,10 @@ profesor* buscarProfe(int carnetP){//función para buscar profesor que recibe po
 return NULL;// no lo encontro
 }
 
-void insertarInicioProfesor(string n, int cP){//funcion para insertar profesores a la lista al inicio, recibe toda la info y crea el nodo
+void insertarInicioProfesor(string n, string aP, int cP){//funcion para insertar profesores a la lista al inicio, recibe toda la info y crea el nodo
     profesor* buscarProfeRepetido = buscarProfe(cP);
     if(buscarProfeRepetido == NULL){
-        profesor* nn = new profesor(n,cP);
+        profesor* nn = new profesor(n, aP,cP);
         nn->sig = primerP;
         if(primerP != NULL)
             primerP->ant = nn;
@@ -116,18 +137,17 @@ void insertarInicioProfesor(string n, int cP){//funcion para insertar profesores
         cout << "** Profesor creado con exito **" << endl;
     }
     else
-        cout << "** Este Carnet de profesor ya existe con el nombre de: " << buscarProfeRepetido->nombre << " **" << endl;
+        cout << "** Este Carnet de profesor ya existe con el nombre de: " << buscarProfeRepetido-> nombre << " **" << endl;
 
 }
 
-void modificarProfesor(int carnetP, string nn ){//función para modificar la info del profesor, recibe el carnet del profesor y los datos nuevos a modificar
+void modificarProfesor(int carnetP, string nN, string nA ){//función para modificar la info del profesor, recibe el carnet del profesor y los datos nuevos a modificar
     profesor* nodoBuscado= buscarProfe(carnetP);
     if(nodoBuscado == NULL)
         cout<<"** No encontrado, no se puede modificar **";
     else
-        nodoBuscado->nombre = nn;
-
-
+        nodoBuscado-> nombre = nN;
+        nodoBuscado-> apellido = nA;
 }
 
 void eliminarProfe(int carnetP){
@@ -194,7 +214,7 @@ void modificarEstudiante(int carnetEstu, string nomN, int edadN){
     }
 }
 
-void eliminarestudiante(int carnetEst){
+void eliminarEstudiante(int carnetEst){ //MODIFICAR ESTE METODO CON EL BUSCAR ESTUDIANTE
     if(primerE == NULL){
         cout <<"ERROR: Lista vacia" << endl;
     }
@@ -215,6 +235,97 @@ void eliminarestudiante(int carnetEst){
             cout<<"ERROR: Este estudiante no existe" << endl;
         }
     }
+}
+
+
+// ------------ Cursos -------------
+
+curso* buscarCurso(string codCurso){//función para buscar cursos, recibe por parámetro el codigo único de este y devuelve el objeto
+    curso* temp = primerC;
+    do{
+        if(temp-> codigo == codCurso)
+            return temp;
+        temp = temp->sig;
+    }while(temp != primerC);
+    return NULL;// no lo encontro
+}
+
+void insertarFinalCurso(string nom, string cod,int cre){
+    curso *buscarCursoRepetido = buscarCurso(cod);
+    if(buscarCursoRepetido == NULL){
+        curso* nn = new curso(nom, cod, cre);
+        if(primerC == NULL){
+            primerC = nn;
+            nn->sig = nn;
+        }
+        else{
+            nn->sig = primerC;
+            curso* temp = primerC;
+            while(temp->sig != primerC)
+                temp = temp->sig;
+            temp->sig = nn;
+        }
+    }
+    else
+        cout << "** Este Curso ya existe con el nombre de: " << buscarCursoRepetido-> nombre << " **" << endl;
+
+}
+
+void modificarCurso(string codC, string nomN, int credN){
+    curso * cursoCambiar = buscarCurso(codC);
+    if (cursoCambiar == NULL){
+        cout<<"** Curso no encontrado **" << endl;
+    }
+    else{
+        cursoCambiar-> nombre = nomN;
+        cursoCambiar-> creditos = credN;
+        cout<<"** Curso Modificado con exito **" << endl;
+    }
+}
+
+void eliminarCurso(string codCur){
+    curso* cursoEliminar = buscarCurso(codCur);
+    if(cursoEliminar == NULL){
+        cout <<"Este curso no existe " << endl;
+    }
+    else if(primerC-> codigo == codCur){
+        primerC = primerC-> sig;
+    }
+    else{
+        curso* temp = primerC;
+        curso* tempAnt= primerC;
+        do{
+           if(temp-> codigo == codCur)
+                tempAnt->sig = temp->sig;
+           tempAnt= temp;
+           temp = temp->sig;
+        }while(temp != primerC);
+    }
+}
+
+
+// ------------ Reuniones -------------
+
+
+reunion* buscarReunion(int idRe){//función para buscar reuniones que recibe por parámetro el códigp único de esta y devuelve el objeto
+    reunion*temp = primerR;
+    while(temp!= NULL){
+        if(temp-> idReunion == idRe)
+            return temp;
+        temp = temp->sig;
+    }
+return NULL;// no lo encontro
+}
+
+void insertarReunion(int idR, string fe, string hI, string hF){
+    reunion *buscarReunionRepetida = buscarReunion(idR);
+    if(buscarReunionRepetida == NULL){
+        reunion* nn = new reunion(idR, fe, hI, hF);
+        nn->sig = primerR;
+        primerR = nn;
+    }
+    else
+        cout << "** Este id de Reunion ya fue utlizado por favor indique otro " << endl;
 }
 
 
@@ -247,6 +358,26 @@ void imprimirProfesores(){//esto es nomas para probar luego se puede borrar
     }
 }
 
+void imprimirCursos(){//esto es nomas para probar luego se puede borrar
+    if(primerC == NULL)
+        cout<<"\nNo hay lista circular";
+    else{
+        curso* temp = primerC;
+       do{
+            cout << temp-> nombre <<", " << temp-> codigo <<", " << temp-> creditos << endl;
+            temp = temp->sig;
+        }while(temp != primerC);
+    }
+}
+
+
+void imprimirReuniones(){//para imprimir admins se borra luego xd
+    reunion *temp = primerR;
+    while(temp != NULL){
+        cout<<temp->idReunion <<", " << temp->fecha <<", " << temp->horaInicio <<", " << temp->horaFinal << endl;
+        temp = temp->sig;
+    }
+}
 
 // "frontend"
 
@@ -281,16 +412,21 @@ while (opcion != 0){
             }
             else if (elemento == "Profesores"){
                 string nombre;
+                string apellido;
                 int carnet;
                 cout << "Ingrese el nombre de el/la profesor(a)\n-------------------------------------" << endl;
                 cin >> nombre;
                 system("cls");
 ;
+                cout << "Ingrese el apellido de el/la profesor(a)\n-------------------------------------" << endl;
+                cin >> apellido;
+                system("cls");
+
                 cout << "Ingrese el carnet de el/la  profesor(a)\n-------------------------------------" << endl;
                 cin >> carnet;
                 system("cls");
 
-                insertarInicioProfesor(nombre, carnet);
+                insertarInicioProfesor(nombre, apellido, carnet);
             }
             else {
                 string nombre;
@@ -331,6 +467,7 @@ while (opcion != 0){
             }
             else if (elemento == "Profesores"){
                 string nombreN;
+                string apellidoN;
                 int carnet;
                 cout << "Ingrese el carnet de el/la  profesor(a)\n-------------------------------------" << endl;
                 cin >> carnet;
@@ -338,8 +475,11 @@ while (opcion != 0){
                 cout << "Ingrese el nombre nuevo de el/la profesor(a)\n-------------------------------------" << endl;
                 cin >> nombreN;
                 system("cls");
+                cout << "Ingrese el apellido nuevo de el/la profesor(a)\n-------------------------------------" << endl;
+                cin >> apellidoN;
+                system("cls");
 
-                modificarProfesor(carnet, nombreN);
+                modificarProfesor(carnet, nombreN, apellidoN);
             }
             else {
                 //---------------- ACA VA EL MODIFICAR CURSO
@@ -369,7 +509,7 @@ while (opcion != 0){
                 cin >> carnet;
                 system("cls");
 
-                eliminarestudiante(carnet);
+                eliminarEstudiante(carnet);
             }
             else if (elemento == "Profesores"){
                 int carnet;
@@ -587,8 +727,8 @@ return;
 
 int main()
 {
-    cout << " --- profes --- " << endl;
-    insertarInicioProfesor("Laura", 2021);
+    //cout << " --- profes --- " << endl;
+    insertarInicioProfesor("Laura", "Mora", 2021);
     //insertarInicioProfesor("Oscar", 2021);
     //insertarInicioProfesor("Oscar", 2027);
     //insertarInicioProfesor("Mario", 2309);
@@ -599,7 +739,7 @@ int main()
 
 
     //cout << endl << " --- Admins --- " << endl;
-    insertarAdmin("Paulo", 2021);
+    insertarAdmin("Paulo", "kk", 2021);
     //imprimirAdmins();
 
     //La insercion de estudiantes de esta haciendo al inicio pero tiene que ser ordenada por algun parametro y no logro hacerlo help
@@ -612,9 +752,36 @@ int main()
     //imprimirEstudiantes();
 
     //cout << endl << "Cambiiooosss" << endl;
-    //eliminarestudiante(2021);
+    //eliminarEstudiante(2021);
     //imprimirEstudiantes();
 
-    menu();
+    //cout << " --- cursos --- " << endl;
+
+    insertarFinalCurso("Estructuras", "E 2089", 4);
+    insertarFinalCurso("Comu Escrita", "CE 2000", 2);
+    insertarFinalCurso("Introduccion", "I 1000", 5);
+    insertarFinalCurso("Poo", "P 2654", 3);
+    //imprimirCursos();
+
+    //cout << endl << "Cambiiooosss" << endl;
+
+    //modificarCurso("CE 2000", "Comu Oral", 3);
+    //imprimirCursos();
+
+    //eliminarCurso("I 100");
+    //cout << endl << "curso eliminado" << endl;
+    //imprimirCursos();
+
+
+    cout << " --- reuniones --- " << endl;
+
+    insertarReunion(2343, "26/4/2021", "12:00", "4:00");
+    insertarReunion(2343, "26/4/2021", "12:00", "4:00");
+    insertarReunion(2342, "27/4/2021", "7:00", "11:00");
+    insertarReunion(2344, "28/4/2021", "12:00", "4:00");
+    imprimirReuniones();
+
+    //menu();
 
 }
+
