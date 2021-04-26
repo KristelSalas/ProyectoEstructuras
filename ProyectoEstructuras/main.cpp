@@ -2,9 +2,9 @@
 #include<stdlib.h>
 using namespace std;
 
-//Autores: Anthony Arias y Kristel Salas
-//Fecha de Inicio: 18-4-2021
-//Última fecha de modificación: 23-4-2021
+/*Autores: Anthony Arias y Kristel Salas
+Fecha de Inicio: 18-4-2021
+Última fecha de modificación: 25-4-2021 */
 
 
 //Constructores
@@ -88,7 +88,6 @@ struct reunion { //lista simple
 
 // ------------ Admins -------------
 
-
 administrador* buscarAdmin(int claveA){//función para buscar admins que recibe por parámetro el carnet único de este y devuelve el objeto
     administrador*temp = primerA;
     while(temp!= NULL){
@@ -112,9 +111,7 @@ void insertarAdmin(string n, string aP, int cA){
 
 
 
-
 // ------------ Profes -------------
-
 
 profesor* buscarProfe(int carnetP){//función para buscar profesor que recibe por parámetro el carnet único de este y devuelve el objeto
     profesor*temp = primerP;
@@ -238,6 +235,7 @@ void eliminarEstudiante(int carnetEst){ //MODIFICAR ESTE METODO CON EL BUSCAR ES
 }
 
 
+
 // ------------ Cursos -------------
 
 curso* buscarCurso(string codCurso){//función para buscar cursos, recibe por parámetro el codigo único de este y devuelve el objeto
@@ -304,8 +302,8 @@ void eliminarCurso(string codCur){
 }
 
 
-// ------------ Reuniones -------------
 
+// ------------ Reuniones -------------
 
 reunion* buscarReunion(int idRe){//función para buscar reuniones que recibe por parámetro el códigp único de esta y devuelve el objeto
     reunion*temp = primerR;
@@ -329,8 +327,8 @@ void insertarReunion(int idR, string fe, string hI, string hF){
 }
 
 
-// ------------ Imprimirsh que luego se borran xd -------------
 
+// ------------ Imprimirsh que luego se borran xd -------------
 
 void imprimirEstudiantes(){//para imprimir estudiantes se borra luego xd
     estudiante *temp = primerE;
@@ -370,7 +368,6 @@ void imprimirCursos(){//esto es nomas para probar luego se puede borrar
     }
 }
 
-
 void imprimirReuniones(){//para imprimir admins se borra luego xd
     reunion *temp = primerR;
     while(temp != NULL){
@@ -379,7 +376,11 @@ void imprimirReuniones(){//para imprimir admins se borra luego xd
     }
 }
 
-// "frontend"
+
+
+// "FRONTEND"
+
+
 
 // Menu para gestionar el crear, modificar y eliminar tanto de estudiantes, como profesores y cursos ** SIN TERMINAR **
 void menuGestion(string elemento){
@@ -387,7 +388,7 @@ system("cls");
 int opcion = -1;
 while (opcion != 0){
 
-    cout << "\nGestion de " << elemento << "\n-------------------------------------\n1- Crear " << elemento << " \n2- Modificar " << elemento << " \n3- Eliminar " << elemento << "\n0- Para Salir\n-------------------------------------"  << endl;
+    cout << "\nGestion de " << elemento << "\n-------------------------------------\n1- Crear " << elemento << " \n2- Modificar " << elemento << " \n3- Eliminar " << elemento<< " \n4- Relacionar " << elemento << "\n0- Para Salir\n-------------------------------------"  << endl;
     cin >> opcion;
 
     switch (opcion){
@@ -398,12 +399,15 @@ while (opcion != 0){
                 string nombre;
                 int edad;
                 int carnet;
+
                 cout << "Ingrese el nombre de el/la estudiante\n-------------------------------------" << endl;
                 cin >> nombre;
                 system("cls");
+
                 cout << "Ingrese la edad de el/la estudiante\n-------------------------------------" << endl;
                 cin >> edad;
                 system("cls");
+
                 cout << "Ingrese el carnet de el/la estudiante\n-------------------------------------" << endl;
                 cin >> carnet;
                 system("cls");
@@ -414,10 +418,11 @@ while (opcion != 0){
                 string nombre;
                 string apellido;
                 int carnet;
+
                 cout << "Ingrese el nombre de el/la profesor(a)\n-------------------------------------" << endl;
                 cin >> nombre;
                 system("cls");
-;
+
                 cout << "Ingrese el apellido de el/la profesor(a)\n-------------------------------------" << endl;
                 cin >> apellido;
                 system("cls");
@@ -432,12 +437,15 @@ while (opcion != 0){
                 string nombre;
                 string codigo;
                 int creditos;
+
                 cout << "Ingrese el nombre del curso\n-------------------------------------" << endl;
                 cin >> nombre;
                 system("cls");
+
                 cout << "Ingrese el codigo del curso\n-------------------------------------" << endl;
                 cin >> codigo;
                 system("cls");
+
                 cout << "Ingrese la cantidad de creditos del curso\n-------------------------------------" << endl;
                 cin >> creditos;
                 system("cls");
@@ -450,15 +458,20 @@ while (opcion != 0){
         case 2:
             system("cls");
             if (elemento == "Estudiantes"){
+                cout << "Estudiantes\n-------------------------------------" << endl;
+                imprimirEstudiantes();
                 string nombreN;
                 int edadN;
                 int carnet;
-                cout << "Ingrese el carnet de el/la estudiante\n-------------------------------------" << endl;
+
+                cout << "\n\nIngrese el carnet de el/la estudiante\n-------------------------------------" << endl;
                 cin >> carnet;
                 system("cls");
+
                 cout << "Ingrese el nombre nuevo de el/la estudiante\n-------------------------------------" << endl;
                 cin >> nombreN;
                 system("cls");
+
                 cout << "Ingrese la edad nueva de el/la estudiante\n-------------------------------------" << endl;
                 cin >> edadN;
                 system("cls");
@@ -469,12 +482,15 @@ while (opcion != 0){
                 string nombreN;
                 string apellidoN;
                 int carnet;
+
                 cout << "Ingrese el carnet de el/la  profesor(a)\n-------------------------------------" << endl;
                 cin >> carnet;
                 system("cls");
+
                 cout << "Ingrese el nombre nuevo de el/la profesor(a)\n-------------------------------------" << endl;
                 cin >> nombreN;
                 system("cls");
+
                 cout << "Ingrese el apellido nuevo de el/la profesor(a)\n-------------------------------------" << endl;
                 cin >> apellidoN;
                 system("cls");
@@ -482,21 +498,23 @@ while (opcion != 0){
                 modificarProfesor(carnet, nombreN, apellidoN);
             }
             else {
-                //---------------- ACA VA EL MODIFICAR CURSO
-                //string nombre;
-                //string codigo;
-                //int creditos;
-                //cout << "Ingrese el nombre del curso\n-------------------------------------" << endl;
-                //cin >> nombre;
-                //system("cls");
-                //cout << "Ingrese el codigo del curso\n-------------------------------------" << endl;
-                //cin >> codigo;
-                //system("cls");
-                //cout << "Ingrese la cantidad de creditos del curso\n-------------------------------------" << endl;
-                //cin >> creditos;
-                //system("cls");
+                string nombreN;
+                string codigo;
+                int creditosN;
 
-                //modificarCurso(nombre, codigo, creditos);;
+                cout << "Ingrese el código del curso\n-------------------------------------" << endl;
+                cin >> codigo;
+                system("cls");
+
+                cout << "Ingrese el nuevo nombre del curso\n-------------------------------------" << endl;
+                cin >> nombreN;
+                system("cls");
+
+                cout << "Ingrese la cantidad nueva de creditos del curso\n-------------------------------------" << endl;
+                cin >> creditosN;
+                system("cls");
+
+                modificarCurso(codigo, nombreN, creditosN);
 
             }
             break;
@@ -520,27 +538,46 @@ while (opcion != 0){
                 eliminarProfe(carnet);
             }
             else {
+                string codigo;
+                cout << "Ingrese el codigo del curso a eliminar\n-------------------------------------" << endl;
+                cin >> codigo;
+                system("cls");
 
-                //---------------- ACA VA EL ELIMINAR CURSO
-                //string nombre;
-                //string codigo;
-                //int creditos;
-                //cout << "Ingrese el nombre del curso\n-------------------------------------" << endl;
-                //cin >> nombre;
-                //system("cls");
-                //cout << "Ingrese el codigo del curso\n-------------------------------------" << endl;
-                //cin >> codigo;
-                //system("cls");
-                //cout << "Ingrese la cantidad de creditos del curso\n-------------------------------------" << endl;
-                //cin >> creditos;
-                //system("cls");
-
-                //modificarCurso(nombre, codigo, creditos);
+                eliminarCurso(codigo);
 
             }
             break;
+            //------------------------- ASOCIAR -------------------------
+        /*case 4:
+            system("cls");
+            if (elemento == "Estudiantes"){
+                int carnet;
+                cout << "Ingrese el carnet de el/la estudiante a quien desea asociar\n-------------------------------------" << endl;
+                cin >> carnet;
+                system("cls");
+
+                *estudiante nodoB = buscarEstudiante(carnet);
+
+                if (nodoB != NULL){
+                    cout << "1- Para asociar un curso\n2- Para modificar cursos\n" << endl;
+
+                }
 
 
+                eliminarEstudiante(carnet);
+            }
+            else if (elemento == "Profesores"){
+                int carnet;
+                cout << "Ingrese el carnet de el/la  profesor(a)\n-------------------------------------" << endl;
+                cin >> carnet;
+                system("cls");
+
+                eliminarProfe(carnet);
+            }
+            else {
+                break;
+            }
+            break;*/
     }
 }
 return;
@@ -622,19 +659,19 @@ while (validacion != true){
             cin >> opcion;
             switch(opcion){
                 case 1:
-                    //consultarReuniones();
+                    //consultarReuniones(carnetP);
                     break;
                 case 2:
-                    //consultarAsistenciaPorReu();
+                    //consultarAsistenciaPorReu(carnetP);
                     break;
                 case 3:
-                    //consultarAsitenciaTodasReu();
+                    //consultarAsitenciaTodasReu(carnetP);
                     break;
                 case 4:
-                    //consultarReuSinAsis();
+                    //consultarReuSinAsis(carnetP);
                     break;
                 case 5:
-                    //consultarTresAusencias();
+                    //consultarTresAusencias(carnetP);
                     break;
                 case 0:
                     break;
@@ -699,7 +736,7 @@ while (validacion != true){
 return;
 }
 
-
+//menu principal donde se selecciona el tipo de usuario con el que se desea ingresar al sistema
 void menu(){
 int opcion = -1;
 while (opcion != 0){
@@ -757,10 +794,10 @@ int main()
 
     //cout << " --- cursos --- " << endl;
 
-    insertarFinalCurso("Estructuras", "E 2089", 4);
+    /*insertarFinalCurso("Estructuras", "E 2089", 4);
     insertarFinalCurso("Comu Escrita", "CE 2000", 2);
     insertarFinalCurso("Introduccion", "I 1000", 5);
-    insertarFinalCurso("Poo", "P 2654", 3);
+    insertarFinalCurso("Poo", "P 2654", 3);*/
     //imprimirCursos();
 
     //cout << endl << "Cambiiooosss" << endl;
@@ -773,15 +810,14 @@ int main()
     //imprimirCursos();
 
 
-    cout << " --- reuniones --- " << endl;
+    //cout << " --- reuniones --- " << endl;
 
-    insertarReunion(2343, "26/4/2021", "12:00", "4:00");
-    insertarReunion(2343, "26/4/2021", "12:00", "4:00");
-    insertarReunion(2342, "27/4/2021", "7:00", "11:00");
-    insertarReunion(2344, "28/4/2021", "12:00", "4:00");
-    imprimirReuniones();
+   /* insertarReunion(1111, "26/4/2021", "12:00", "4:00");
+    insertarReunion(2222, "27/4/2021", "7:00", "11:00");
+    insertarReunion(3333, "28/4/2021", "12:00", "4:00");
+    imprimirReuniones(); */
 
-    //menu();
+    menu();
 
 }
 
