@@ -9,6 +9,7 @@ Fecha de Inicio: 18-4-2021
 
 //Constructores
 
+
 struct administrador { //lista simple
     string nombre;
     string apellido;
@@ -29,6 +30,7 @@ struct profesor { //Lista doble con inserción al inicio
     int carnetProfesor;
     profesor* sig;
     profesor* ant;
+    struct cursosProfes* subListaCursosProfe;
 
     profesor(string n, string aP, int cP){
         nombre = n;
@@ -36,6 +38,7 @@ struct profesor { //Lista doble con inserción al inicio
         carnetProfesor = cP;
         sig = NULL;
         ant = NULL;
+        subListaCursosProfe = NULL;
     }
 }*primerP;
 
@@ -44,12 +47,14 @@ struct estudiante { //lista simple con insercion ordenada de lo que queramos, qu
     int edad;
     int carnetE;
     estudiante*sig;
+    struct cursosMatriculados* subListaCursos;
 
     estudiante(string n, int e, int ce){
         nombre = n;
         edad = e;
         carnetE = ce;
         sig = NULL;
+        subListaCursos = NULL;
     }
 }*primerE;
 
@@ -83,10 +88,31 @@ struct reunion { //lista simple
     }
 }*primerR;
 
+struct cursosMatriculados{
+    cursosMatriculados* sig;
+    struct curso *enlaceCurso;
+
+    cursosMatriculados(struct curso *c){
+        sig = NULL;
+        enlaceCurso = c;
+    }
+};
+
+struct cursosProfes{
+    cursosProfes* sig;
+    struct curso *enlaceCursoP;
+
+    cursosProfes(struct curso *cu){
+        sig = NULL;
+        enlaceCursoP = cu;
+    }
+};
 
 //Funciones
 
+
 // ------------ Admins -------------
+
 
 administrador* buscarAdmin(int claveA){//función para buscar admins que recibe por parámetro el carnet único de este y devuelve el objeto
     administrador*temp = primerA;
@@ -110,8 +136,8 @@ void insertarAdmin(string n, string aP, int cA){
 }
 
 
-
 // ------------ Profes -------------
+
 
 profesor* buscarProfe(int carnetP){//función para buscar profesor que recibe por parámetro el carnet único de este y devuelve el objeto
     profesor*temp = primerP;
@@ -142,9 +168,10 @@ void modificarProfesor(int carnetP, string nN, string nA ){//función para modif
     profesor* nodoBuscado= buscarProfe(carnetP);
     if(nodoBuscado == NULL)
         cout<<"** No encontrado, no se puede modificar **";
-    else
+    else{
         nodoBuscado-> nombre = nN;
         nodoBuscado-> apellido = nA;
+    }
 }
 
 void eliminarProfe(int carnetP){
@@ -174,8 +201,8 @@ void eliminarProfe(int carnetP){
 }
 
 
-
 // ------------ Estudiantes -------------
+
 
 estudiante* buscarEstudiante(int carnetEst){//función para buscar estudiantes, recibe por parámetro el carnet único de este y devuelve el objeto
     estudiante* temp = primerE;
@@ -228,30 +255,29 @@ void eliminarEstudiante(int carnetEst){ //MODIFICAR ESTE METODO CON EL BUSCAR ES
             tempAnt= temp;
             temp = temp->sig;
         }
-        if(temp==NULL){
-            cout<<"ERROR: Este estudiante no existe" << endl;
-        }
     }
 }
 
 
-
 // ------------ Cursos -------------
 
-curso* buscarCurso(string codCurso){//función para buscar cursos, recibe por parámetro el codigo único de este y devuelve el objeto
+
+curso* buscarCurso(string codCurso){//función para buscar estudiantes, recibe por parámetro el carnet único de este y devuelve el objeto
+    if(primerC == NULL)
+        return NULL;
     curso* temp = primerC;
     do{
-        if(temp-> codigo == codCurso)
+        if(temp->codigo == codCurso)
             return temp;
         temp = temp->sig;
     }while(temp != primerC);
     return NULL;// no lo encontro
 }
 
-void insertarFinalCurso(string nom, string cod,int cre){
-    curso *buscarCursoRepetido = buscarCurso(cod);
+void insertarFinalCurso(string nom, string codC, int cre){
+    curso* buscarCursoRepetido = buscarCurso(codC);
     if(buscarCursoRepetido == NULL){
-        curso* nn = new curso(nom, cod, cre);
+        curso* nn = new curso(nom, codC, cre);
         if(primerC == NULL){
             primerC = nn;
             nn->sig = nn;
@@ -266,7 +292,6 @@ void insertarFinalCurso(string nom, string cod,int cre){
     }
     else
         cout << "** Este Curso ya existe con el nombre de: " << buscarCursoRepetido-> nombre << " **" << endl;
-
 }
 
 void modificarCurso(string codC, string nomN, int credN){
@@ -286,8 +311,13 @@ void eliminarCurso(string codCur){
     if(cursoEliminar == NULL){
         cout <<"Este curso no existe " << endl;
     }
-    else if(primerC-> codigo == codCur){
+    else if(primerC->codigo == codCur){
+        curso* temp = primerC;
+        do{
+           temp = temp->sig;
+        }while(temp->sig != primerC);
         primerC = primerC-> sig;
+        temp-> sig = NULL;
     }
     else{
         curso* temp = primerC;
@@ -302,8 +332,8 @@ void eliminarCurso(string codCur){
 }
 
 
-
 // ------------ Reuniones -------------
+
 
 reunion* buscarReunion(int idRe){//función para buscar reuniones que recibe por parámetro el códigp único de esta y devuelve el objeto
     reunion*temp = primerR;
@@ -321,16 +351,57 @@ void insertarReunion(int idR, string fe, string hI, string hF){
         reunion* nn = new reunion(idR, fe, hI, hF);
         nn->sig = primerR;
         primerR = nn;
+        cout << "Reunion insertada con exito " << endl;
     }
     else
         cout << "** Este id de Reunion ya fue utlizado por favor indique otro " << endl;
 }
 
 
+// ------------ Estudiantes y cursos -------------
 
-// ------------ Imprimirsh que luego se borran xd -------------
 
-void imprimirEstudiantes(){//para imprimir estudiantes se borra luego xd
+void insertarCursoEstudiante(int carnetE, string codigoC){
+    struct estudiante* elEstudiante = buscarEstudiante(carnetE);
+    struct curso* elCurso = buscarCurso(codigoC);
+    if(elEstudiante == NULL){
+        cout<<"Este estudiante no existe" << endl;
+        return;
+    }
+    if(elCurso == NULL){
+        cout<<"Este curso no existe" << endl;
+        return;
+    }
+    struct cursosMatriculados *nuevaMatricula = new cursosMatriculados(elCurso);
+    nuevaMatricula-> sig = elEstudiante-> subListaCursos;
+    elEstudiante-> subListaCursos = nuevaMatricula;
+ }
+
+
+// ------------ Estudiantes y cursos -------------
+
+
+void insertarCursoProfesor(int carnetP, string codigoC){
+    struct profesor* elProfe = buscarProfe(carnetP);
+    struct curso* elCurso = buscarCurso(codigoC);
+    if(elProfe == NULL){
+        cout<<"Este profesor no existe" << endl;
+        return;
+    }
+    if(elCurso == NULL){
+        cout<<"Este curso no existe" << endl;
+        return;
+    }
+    struct cursosProfes *nuevoCurso = new cursosProfes(elCurso);
+    nuevoCurso-> sig = elProfe-> subListaCursosProfe;
+    elProfe-> subListaCursosProfe = nuevoCurso;
+ }
+
+
+// ------------ Imprimirsh listas y Sublistas -------------
+
+
+void imprimirEstudiantes(){//
     estudiante *temp = primerE;
     if (temp == NULL)
         cout << "ERROR: Lista vacia";
@@ -340,39 +411,69 @@ void imprimirEstudiantes(){//para imprimir estudiantes se borra luego xd
     }
 }
 
-void imprimirAdmins(){//para imprimir admins se borra luego xd
+void imprimirAdmins(){//
     administrador *temp = primerA;
     while(temp != NULL){
-        cout<<temp-> nombre <<", " << temp-> claveAdmin << endl;
+        cout<<temp-> nombre <<", " <<temp-> apellido <<", " << temp-> claveAdmin << endl;
         temp = temp->sig;
     }
 }
 
-void imprimirProfesores(){//esto es nomas para probar luego se puede borrar
+void imprimirProfesores(){//
     profesor* temp = primerP;
     while(temp!= NULL){
-        cout<<temp->nombre <<", " << temp->carnetProfesor << endl;
+        cout<<temp-> nombre <<", " <<temp-> apellido <<", " << temp-> carnetProfesor << endl;
         temp = temp->sig;
     }
 }
 
-void imprimirCursos(){//esto es nomas para probar luego se puede borrar
+void imprimirCursos(){
     if(primerC == NULL)
-        cout<<"\nNo hay lista circular";
+        cout << "No hay lista circular" << endl;
     else{
         curso* temp = primerC;
        do{
-            cout << temp-> nombre <<", " << temp-> codigo <<", " << temp-> creditos << endl;
-            temp = temp->sig;
+           cout << temp-> nombre <<", " << temp-> codigo <<", " << temp-> creditos << endl;
+           temp = temp->sig;
         }while(temp != primerC);
     }
 }
 
-void imprimirReuniones(){//para imprimir admins se borra luego xd
+void imprimirReuniones(){//
     reunion *temp = primerR;
     while(temp != NULL){
         cout<<temp->idReunion <<", " << temp->fecha <<", " << temp->horaInicio <<", " << temp->horaFinal << endl;
         temp = temp->sig;
+    }
+}
+
+void  imprimirCursosEstudiante(int carnetE){
+    struct estudiante* elEstudiante = buscarEstudiante(carnetE);
+    if(elEstudiante == NULL){
+        cout<<"Este estudiante no existe" << endl;
+        return;
+    }
+    cout<<"Nombre del Estudiante: " << elEstudiante-> nombre << endl;
+    cout<<"Sus cursos son: "<<endl;
+    struct cursosMatriculados* tempCursoM = elEstudiante-> subListaCursos;
+    while(tempCursoM != NULL){
+        cout << tempCursoM->enlaceCurso->nombre << ", " << tempCursoM->enlaceCurso->codigo << ", " << tempCursoM->enlaceCurso->creditos << endl;
+        tempCursoM = tempCursoM-> sig;
+    }
+}
+
+void  imprimirCursosProfe(int carnetE){
+    struct profesor* elProfe = buscarProfe(carnetE);
+    if(elProfe == NULL){
+        cout<<"Este Profesor no existe" << endl;
+        return;
+    }
+    cout<<"Nombre del Profesor: " << elProfe-> nombre << " " << elProfe-> apellido << endl;
+    cout<<"Los cursos que imparte son: "<<endl;
+    struct cursosProfes* tempCursoP = elProfe-> subListaCursosProfe;
+    while(tempCursoP != NULL){
+        cout << tempCursoP->enlaceCursoP->nombre << ", " << tempCursoP->enlaceCursoP->codigo << ", " << tempCursoP->enlaceCursoP->creditos << endl;
+        tempCursoP = tempCursoP-> sig;
     }
 }
 
@@ -450,7 +551,7 @@ while (opcion != 0){
                 cin >> creditos;
                 system("cls");
 
-                //insertarCurso(nombre, codigo, creditos);
+                insertarFinalCurso(nombre, codigo, creditos);
 
             }
             break;
@@ -766,9 +867,9 @@ int main()
 {
     //cout << " --- profes --- " << endl;
     insertarInicioProfesor("Laura", "Mora", 2021);
-    //insertarInicioProfesor("Oscar", 2021);
-    //insertarInicioProfesor("Oscar", 2027);
-    //insertarInicioProfesor("Mario", 2309);
+    insertarInicioProfesor("Oscar", "mora", 2021);
+    insertarInicioProfesor("Oscar", "mora", 2027);
+    insertarInicioProfesor("Mario", "mora",  2309);
     //imprimirProfesores();
     //cout << endl << "Cambiiooosss" << endl;
     //eliminarProfe(2021);
@@ -777,47 +878,58 @@ int main()
 
     //cout << endl << " --- Admins --- " << endl;
     insertarAdmin("Paulo", "kk", 2021);
+    insertarAdmin("Jose", "jimenez", 2020);
     //imprimirAdmins();
 
-    //La insercion de estudiantes de esta haciendo al inicio pero tiene que ser ordenada por algun parametro y no logro hacerlo help
     //cout << endl << " --- estudiantes --- " << endl;
     insertarEstudiante("Vanessa", 15, 2020);
-    //insertarEstudiante("Alonso", 18, 2021);
+    insertarEstudiante("Alonso", 18, 2021);
     //insertarEstudiante("Vanessa", 15, 2020);
     //imprimirEstudiantes();
     //modificarEstudiante(2021, "Pepe", 19);
     //imprimirEstudiantes();
 
     //cout << endl << "Cambiiooosss" << endl;
-    //eliminarEstudiante(2021);
+    //eliminarEstudiante(2020);
     //imprimirEstudiantes();
 
-    //cout << " --- cursos --- " << endl;
+    cout << endl << "cursos" << endl;
 
-    /*insertarFinalCurso("Estructuras", "E 2089", 4);
-    insertarFinalCurso("Comu Escrita", "CE 2000", 2);
-    insertarFinalCurso("Introduccion", "I 1000", 5);
-    insertarFinalCurso("Poo", "P 2654", 3);*/
-    //imprimirCursos();
+    insertarFinalCurso("Estructuras", "E 9090", 4);
+    insertarFinalCurso("Estructuras", "E 100", 4);
+    insertarFinalCurso("POO", "P 3030", 3);
 
-    //cout << endl << "Cambiiooosss" << endl;
+    /*imprimirCursos();
 
-    //modificarCurso("CE 2000", "Comu Oral", 3);
-    //imprimirCursos();
+    cout << endl << "cursos modificados" << endl;
+    modificarCurso("P 3030", "Intro", 4);
+    imprimirCursos();
 
-    //eliminarCurso("I 100");
-    //cout << endl << "curso eliminado" << endl;
-    //imprimirCursos();
+    cout << endl << "cursos despues de eliminar" << endl;
+    eliminarCurso("E 9090");
+    imprimirCursos();*/
 
+    //cout << endl << " --- reuniones --- " << endl;
 
-    //cout << " --- reuniones --- " << endl;
-
-   /* insertarReunion(1111, "26/4/2021", "12:00", "4:00");
+    insertarReunion(1111, "26/4/2021", "12:00", "4:00");
     insertarReunion(2222, "27/4/2021", "7:00", "11:00");
     insertarReunion(3333, "28/4/2021", "12:00", "4:00");
-    imprimirReuniones(); */
+    //imprimirReuniones();
 
-    menu();
+    cout << endl << " --- Cursos de Estudiante --- " << endl;
+
+    insertarCursoEstudiante(2020,"E 9090");
+    insertarCursoEstudiante(2020,"P 3030");
+    imprimirCursosEstudiante(2020);
+
+    cout << endl << " --- Cursos de Profes --- " << endl;
+
+    insertarCursoProfesor(2021,"E 9090");
+    insertarCursoProfesor(2021,"E 100");
+    insertarCursoProfesor(2021,"P 3030");
+    imprimirCursosProfe(2021);
+
+    //menu();
 
 }
 
