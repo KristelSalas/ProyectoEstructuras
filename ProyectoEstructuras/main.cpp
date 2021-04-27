@@ -4,7 +4,7 @@ using namespace std;
 
 /*Autores: Anthony Arias y Kristel Salas
 Fecha de Inicio: 18-4-2021
-Última fecha de modificación: 25-4-2021 */
+Última fecha de modificación: 26-4-2021 */
 
 
 //Constructores
@@ -271,7 +271,7 @@ curso* buscarCurso(string codCurso){//función para buscar estudiantes, recibe p
             return temp;
         temp = temp->sig;
     }while(temp != primerC);
-    return NULL;// no lo encontro
+return NULL;// no lo encontro
 }
 
 void insertarFinalCurso(string nom, string codC, int cre){
@@ -361,6 +361,16 @@ void insertarReunion(int idR, string fe, string hI, string hF){
 // ------------ Estudiantes y cursos -------------
 
 
+/*estudiante* buscarCursosEstudiante(int carnetE){//función para buscar los cursos de un estudiante que recibe por parámetro el códigp único del estudiante y devuelve los cursos
+    estudiante*temp = primerE;
+    while(temp!= NULL){
+        if(temp->carnetE == carnetE)
+            return temp-> subListaCursos;
+        temp = temp->sig;
+    }
+return NULL;// no lo encontro
+}*/
+
 void insertarCursoEstudiante(int carnetE, string codigoC){
     struct estudiante* elEstudiante = buscarEstudiante(carnetE);
     struct curso* elCurso = buscarCurso(codigoC);
@@ -377,8 +387,30 @@ void insertarCursoEstudiante(int carnetE, string codigoC){
     elEstudiante-> subListaCursos = nuevaMatricula;
  }
 
+void modificarCursoEstudiante(int carnetE, string codigoCV, string codigoCN){
+    estudiante *elEstudiante = buscarEstudiante(carnetE);
+    cursosMatriculados* cursoM = elEstudiante-> subListaCursos;
+    if (elEstudiante == NULL){
+        cout<<"** Estudiante no encontrado **" << endl;
+    }
+    else{
+        while(cursoM != NULL){
+            if(cursoM->enlaceCurso->codigo == codigoCV){
+                curso *cursoNuevo = buscarCurso(codigoCN);
+                cursoM->enlaceCurso->codigo = cursoNuevo->codigo;
+                cursoM->enlaceCurso->nombre = cursoNuevo->nombre;
+                cursoM->enlaceCurso->creditos = cursoNuevo->creditos;
+                cout<<"** Curso modificado con exito **" << endl;
+            }
+            cursoM = cursoM-> sig;
+        }
+    }
+}
 
-// ------------ Estudiantes y cursos -------------
+
+
+
+// ------------ Profesores y cursos -------------
 
 
 void insertarCursoProfesor(int carnetP, string codigoC){
@@ -893,15 +925,17 @@ int main()
     //eliminarEstudiante(2020);
     //imprimirEstudiantes();
 
-    cout << endl << "cursos" << endl;
+    //cout << endl << "cursos" << endl;
 
-    insertarFinalCurso("Estructuras", "E 9090", 4);
+
     insertarFinalCurso("Estructuras", "E 100", 4);
     insertarFinalCurso("POO", "P 3030", 3);
+    insertarFinalCurso("Comu Oral", "CO 1010", 2);
+    insertarFinalCurso("Taller", "T 5050", 4);
 
-    /*imprimirCursos();
+    imprimirCursos();
 
-    cout << endl << "cursos modificados" << endl;
+    /*cout << endl << "cursos modificados" << endl;
     modificarCurso("P 3030", "Intro", 4);
     imprimirCursos();
 
@@ -918,15 +952,19 @@ int main()
 
     cout << endl << " --- Cursos de Estudiante --- " << endl;
 
-    insertarCursoEstudiante(2020,"E 9090");
+    insertarCursoEstudiante(2020,"T 5050");
     insertarCursoEstudiante(2020,"P 3030");
+    imprimirCursosEstudiante(2020);
+
+    cout << endl << "cursos modificados" << endl;
+    modificarCursoEstudiante(2020,"T 5050", "CO 1010");
     imprimirCursosEstudiante(2020);
 
     cout << endl << " --- Cursos de Profes --- " << endl;
 
-    insertarCursoProfesor(2021,"E 9090");
     insertarCursoProfesor(2021,"E 100");
     insertarCursoProfesor(2021,"P 3030");
+    insertarCursoProfesor(2021,"CO 1010");
     imprimirCursosProfe(2021);
 
     //menu();
