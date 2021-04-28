@@ -4,7 +4,8 @@ using namespace std;
 
 /*Autores: Anthony Arias y Kristel Salas
 Fecha de Inicio: 18-4-2021
-Última fecha de modificación: 26-4-2021 */
+Última fecha de modificación: 27-4-2021 */
+
 
 
 //Constructores
@@ -108,12 +109,11 @@ struct cursosProfes{
     }
 };
 
+
 //Funciones
 
 
 // ------------ Admins -------------
-
-
 administrador* buscarAdmin(int claveA){//función para buscar admins que recibe por parámetro el carnet único de este y devuelve el objeto
     administrador*temp = primerA;
     while(temp!= NULL){
@@ -130,15 +130,15 @@ void insertarAdmin(string n, string aP, int cA){
         administrador* nn = new administrador(n, aP, cA);
         nn->sig = primerA;
         primerA = nn;
+        cout << "* Administrador insertado con exito *" << endl;
     }
     else
         cout << "** Esta clave de Administrador ya existe con el nombre de: " << buscarAdminRepetido-> nombre << " **" << endl;
 }
 
 
+
 // ------------ Profes -------------
-
-
 profesor* buscarProfe(int carnetP){//función para buscar profesor que recibe por parámetro el carnet único de este y devuelve el objeto
     profesor*temp = primerP;
     while(temp!= NULL){
@@ -201,9 +201,8 @@ void eliminarProfe(int carnetP){
 }
 
 
+
 // ------------ Estudiantes -------------
-
-
 estudiante* buscarEstudiante(int carnetEst){//función para buscar estudiantes, recibe por parámetro el carnet único de este y devuelve el objeto
     estudiante* temp = primerE;
     while(temp!= NULL){
@@ -259,9 +258,8 @@ void eliminarEstudiante(int carnetEst){ //MODIFICAR ESTE METODO CON EL BUSCAR ES
 }
 
 
+
 // ------------ Cursos -------------
-
-
 curso* buscarCurso(string codCurso){//función para buscar estudiantes, recibe por parámetro el carnet único de este y devuelve el objeto
     if(primerC == NULL)
         return NULL;
@@ -332,9 +330,8 @@ void eliminarCurso(string codCur){
 }
 
 
+
 // ------------ Reuniones -------------
-
-
 reunion* buscarReunion(int idRe){//función para buscar reuniones que recibe por parámetro el códigp único de esta y devuelve el objeto
     reunion*temp = primerR;
     while(temp!= NULL){
@@ -358,9 +355,8 @@ void insertarReunion(int idR, string fe, string hI, string hF){
 }
 
 
+
 // ------------ Estudiantes y cursos -------------
-
-
 /*estudiante* buscarCursosEstudiante(int carnetE){//función para buscar los cursos de un estudiante que recibe por parámetro el códigp único del estudiante y devuelve los cursos
     estudiante*temp = primerE;
     while(temp!= NULL){
@@ -372,26 +368,28 @@ return NULL;// no lo encontro
 }*/
 
 void insertarCursoEstudiante(int carnetE, string codigoC){
+
     struct estudiante* elEstudiante = buscarEstudiante(carnetE);
     struct curso* elCurso = buscarCurso(codigoC);
     if(elEstudiante == NULL){
-        cout<<"Este estudiante no existe" << endl;
+        cout<<"*Este estudiante no existe*\n" << endl;
         return;
     }
     if(elCurso == NULL){
-        cout<<"Este curso no existe" << endl;
+        cout<<"*Este curso no existe*\n" << endl;
         return;
     }
     struct cursosMatriculados *nuevaMatricula = new cursosMatriculados(elCurso);
     nuevaMatricula-> sig = elEstudiante-> subListaCursos;
     elEstudiante-> subListaCursos = nuevaMatricula;
+    cout<<"* Curso asociado con exito *\n" << endl;
  }
 
 void modificarCursoEstudiante(int carnetE, string codigoCV, string codigoCN){
     estudiante *elEstudiante = buscarEstudiante(carnetE);
     cursosMatriculados* cursoM = elEstudiante-> subListaCursos;
     if (elEstudiante == NULL){
-        cout<<"** Estudiante no encontrado **" << endl;
+        cout<<"* Estudiante no encontrado *\n" << endl;
     }
     else{
         while(cursoM != NULL){
@@ -400,7 +398,7 @@ void modificarCursoEstudiante(int carnetE, string codigoCV, string codigoCN){
                 cursoM->enlaceCurso->codigo = cursoNuevo->codigo;
                 cursoM->enlaceCurso->nombre = cursoNuevo->nombre;
                 cursoM->enlaceCurso->creditos = cursoNuevo->creditos;
-                cout<<"** Curso modificado con exito **" << endl;
+                cout<<"* Curso modificado con exito *\n" << endl;
             }
             cursoM = cursoM-> sig;
         }
@@ -409,30 +407,24 @@ void modificarCursoEstudiante(int carnetE, string codigoCV, string codigoCN){
 
 
 
-
 // ------------ Profesores y cursos -------------
-
-
 void insertarCursoProfesor(int carnetP, string codigoC){
     struct profesor* elProfe = buscarProfe(carnetP);
     struct curso* elCurso = buscarCurso(codigoC);
-    if(elProfe == NULL){
-        cout<<"Este profesor no existe" << endl;
-        return;
-    }
+
     if(elCurso == NULL){
-        cout<<"Este curso no existe" << endl;
+        cout<<"Este curso no existe\n" << endl;
         return;
     }
+
     struct cursosProfes *nuevoCurso = new cursosProfes(elCurso);
     nuevoCurso-> sig = elProfe-> subListaCursosProfe;
     elProfe-> subListaCursosProfe = nuevoCurso;
+    cout<<"* Curso asociado con exito *\n" << endl;
  }
 
 
 // ------------ Imprimirsh listas y Sublistas -------------
-
-
 void imprimirEstudiantes(){//
     estudiante *temp = primerE;
     if (temp == NULL)
@@ -517,17 +509,25 @@ void  imprimirCursosProfe(int carnetE){
 
 // Menu para gestionar el crear, modificar y eliminar tanto de estudiantes, como profesores y cursos ** SIN TERMINAR **
 void menuGestion(string elemento){
-system("cls");
+
 int opcion = -1;
 while (opcion != 0){
 
-    cout << "\nGestion de " << elemento << "\n-------------------------------------\n1- Crear " << elemento << " \n2- Modificar " << elemento << " \n3- Eliminar " << elemento<< " \n4- Relacionar " << elemento << "\n0- Para Salir\n-------------------------------------"  << endl;
+    if (elemento != "Cursos"){
+        cout << "\nGestion de " << elemento << "\n-------------------------------------\n1- Crear " << elemento << " \n2- Modificar " << elemento << " \n3- Eliminar " << elemento<< " \n4- Relacionar " << elemento << "\n0- Para Salir\n-------------------------------------"  << endl;
+    }
+    else {
+        cout << "\nGestion de " << elemento << "\n-------------------------------------\n1- Crear " << elemento << " \n2- Modificar " << elemento << " \n3- Eliminar " << elemento <<  "\n0- Para Salir\n-------------------------------------"  << endl;
+    }
+
     cin >> opcion;
+    system("cls");
 
     switch (opcion){
         //------------------------- CREAR -------------------------
         case 1:
             system("cls");
+            //crear estudiante
             if (elemento == "Estudiantes"){
                 string nombre;
                 int edad;
@@ -547,6 +547,7 @@ while (opcion != 0){
 
                 insertarEstudiante(nombre, edad, carnet);
             }
+            //crear profesor
             else if (elemento == "Profesores"){
                 string nombre;
                 string apellido;
@@ -566,6 +567,7 @@ while (opcion != 0){
 
                 insertarInicioProfesor(nombre, apellido, carnet);
             }
+            //crear curso
             else {
                 string nombre;
                 string codigo;
@@ -590,6 +592,7 @@ while (opcion != 0){
         //------------------------- MODIFICAR -------------------------
         case 2:
             system("cls");
+            //modificar estudiante
             if (elemento == "Estudiantes"){
                 cout << "Estudiantes\n-------------------------------------" << endl;
                 imprimirEstudiantes();
@@ -611,6 +614,7 @@ while (opcion != 0){
 
                 modificarEstudiante(carnet, nombreN, edadN);
             }
+            //modificar profesor
             else if (elemento == "Profesores"){
                 string nombreN;
                 string apellidoN;
@@ -630,6 +634,7 @@ while (opcion != 0){
 
                 modificarProfesor(carnet, nombreN, apellidoN);
             }
+            //modificar curso
             else {
                 string nombreN;
                 string codigo;
@@ -654,6 +659,7 @@ while (opcion != 0){
         //------------------------- ELIMINAR -------------------------
         case 3:
             system("cls");
+            //eliminar estudiante
             if (elemento == "Estudiantes"){
                 int carnet;
                 cout << "Ingrese el carnet de el/la estudiante\n-------------------------------------" << endl;
@@ -662,6 +668,7 @@ while (opcion != 0){
 
                 eliminarEstudiante(carnet);
             }
+            //eliminar profesor
             else if (elemento == "Profesores"){
                 int carnet;
                 cout << "Ingrese el carnet de el/la  profesor(a)\n-------------------------------------" << endl;
@@ -670,6 +677,7 @@ while (opcion != 0){
 
                 eliminarProfe(carnet);
             }
+            //eliminar curso
             else {
                 string codigo;
                 cout << "Ingrese el codigo del curso a eliminar\n-------------------------------------" << endl;
@@ -677,40 +685,178 @@ while (opcion != 0){
                 system("cls");
 
                 eliminarCurso(codigo);
-
             }
             break;
-            //------------------------- ASOCIAR -------------------------
-        /*case 4:
+        //------------------------- ASOCIAR -------------------------
+        case 4:
             system("cls");
+            //asociar estudiante
+
+            // Se copia todo esto para profes cambiando los metodos de busqueda y los llamad
+
             if (elemento == "Estudiantes"){
                 int carnet;
                 cout << "Ingrese el carnet de el/la estudiante a quien desea asociar\n-------------------------------------" << endl;
                 cin >> carnet;
                 system("cls");
 
-                *estudiante nodoB = buscarEstudiante(carnet);
+                estudiante* nodoBuscado = buscarEstudiante(carnet);
 
-                if (nodoB != NULL){
-                    cout << "1- Para asociar un curso\n2- Para modificar cursos\n" << endl;
+                if (nodoBuscado != NULL){
+
+                    int opcion3 = -1;
+                    while (opcion3 != 0){
+
+                        cout << "1- Para asociar un curso\n2- Para modificar un curso\n3- Para eliminar un curso\n0- para salir\n-------------------------------------" << endl;
+                        cin >> opcion3;
+
+                        switch(opcion3){
+                            case 1:
+                                {
+                                system("cls");
+                                string cCurso;
+
+                                cout << "Ingrese el codigo del curso que desea asociar a " << nodoBuscado ->nombre <<"\n-------------------------------------" << endl;
+                                cin >> cCurso;
+                                system("cls");
+
+                                //llamado
+                                insertarCursoEstudiante(nodoBuscado ->carnetE, cCurso);
+
+
+                                break;
+                                }
+                            case 2:
+                                {
+                                system("cls");
+                                string cCurso2;
+                                string cCursoN;
+
+                                cout << "Ingrese el codigo del curso que desea sustituir\n-------------------------------------" << endl;
+                                cin >> cCurso2;
+                                cout << "\nIngrese el codigo del curso nuevo\n-------------------------------------" << endl;
+                                cin >> cCursoN;
+                                system("cls");
+
+                                //llamado
+                                modificarCursoEstudiante(nodoBuscado ->carnetE, cCurso2, cCursoN);
+                                break;
+                                }
+                            case 3:
+                                {
+                                system("cls");
+                                string cCurso3;
+
+                                cout << "Ingrese el codigo del curso que desea eliminar\n-------------------------------------" << endl;
+                                cin >> cCurso3;
+                                system("cls");
+
+                                //llamado
+                                //eliminarCursoEstudiante(cCurso3);  //FALTAAAAAAAAAAAAAA
+                                break;
+                                }
+                            case 0:
+                                system("cls");
+                                break;
+                            default:
+                                cout << "\nERROR: El valor no es valido\n" << endl;
+                                break;
+                        }
+
+                    }
 
                 }
+                else {
 
-
-                eliminarEstudiante(carnet);
+                    cout << "ERROR: estudiante no existe" << endl;
+                }
             }
+            //asociar profesor
             else if (elemento == "Profesores"){
                 int carnet;
-                cout << "Ingrese el carnet de el/la  profesor(a)\n-------------------------------------" << endl;
+                cout << "Ingrese el carnet de el/la profesor(a) a quien desea asociar\n-------------------------------------" << endl;
                 cin >> carnet;
-                system("cls");
 
-                eliminarProfe(carnet);
+                profesor* nodoBuscado = buscarProfe(carnet);
+                system("cls");
+                if (nodoBuscado != NULL){
+
+                    int opcion3 = -1;
+                    while (opcion3 != 0){
+
+                        cout << "1- Para asociar un curso\n2- Para modificar un curso\n3- Para eliminar un curso\n0- para salir\n-------------------------------------" << endl;
+                        cin >> opcion3;
+
+                        switch(opcion3){
+                            case 1:
+                                {
+                                system("cls");
+                                string cCurso;
+
+                                cout << "Ingrese el codigo del curso que desea asociar a " << nodoBuscado ->nombre <<"\n-------------------------------------" << endl;
+                                cin >> cCurso;
+                                system("cls");
+
+                                //llamado
+                                insertarCursoProfesor(nodoBuscado ->carnetProfesor, cCurso);
+
+
+                                break;
+                                }
+                            case 2:
+                                {
+                                system("cls");
+                                string cCurso2;
+                                string cCursoN;
+
+                                cout << "Ingrese el codigo del curso que desea sustituir\n-------------------------------------" << endl;
+                                cin >> cCurso2;
+                                cout << "\nIngrese el codigo del curso nuevo\n-------------------------------------" << endl;
+                                cin >> cCursoN;
+                                system("cls");
+
+                                //llamado
+                                //modificarCursoProfesor(nodoBuscado ->carnetProfesor, cCurso2, cCursoN); //FALTAAAAAAAAAAAAAA
+                                break;
+                                }
+                            case 3:
+                                {
+                                system("cls");
+                                string cCurso3;
+
+                                cout << "Ingrese el codigo del curso que desea eliminar\n-------------------------------------" << endl;
+                                cin >> cCurso3;
+                                system("cls");
+
+                                //llamado
+                                //eliminarCursoProfesor(cCurso3);  //FALTAAAAAAAAAAAAAA
+                                break;
+                                }
+                            case 0:
+                                system("cls");
+                                break;
+                            default:
+                                cout << "\nERROR: El valor no es valido\n" << endl;
+                                break;
+                        }
+
+                    }
+
+                }
+                else {
+
+                  cout << "\nERROR: El profesor no existe\n" << endl;
+                }
+
             }
+            //asociar curso *no existe*
             else {
-                break;
+            cout << "\nERROR: El valor no es valido\n" << endl;
             }
-            break;*/
+            break;
+        default:
+            cout << "\nERROR: El valor no es valido\n" << endl;
+            break;
     }
 }
 return;
@@ -718,52 +864,72 @@ return;
 
 //menu que se muestra cuando se ingresa como usuario de tipo administrador
 void menuAdmi(){
- system("cls");
+system("cls");
 int claveAd;
 bool validacion = false;
 while (validacion != true){
     cout << "\nPor favor ingrese su clave o digite 0 para volver\n-------------------------------------" << endl;
     cin >> claveAd;
+    system("cls");
 
     if (claveAd != 0){
         administrador* nodoBuscado = buscarAdmin(claveAd);
         if(nodoBuscado == NULL){
-        system("cls");
-        cout<<"\nERROR: El usuario no es valido\n";
+            system("cls");
+            cout<<"\nERROR: El usuario no es valido\n";
         }
         else {
             validacion = true;
             int opcion = -1;
             while (opcion != 0){
-            system("cls");
-            cout << "\nBienvenid@ " << nodoBuscado->nombre << "\n-------------------------------------\n1- Gestionar estudiantes\n2- Gestionar profesores\n3- Gestionar cursos\n0- Para salir\n-------------------------------------" << endl;
+            cout << "\nBienvenid@ " << nodoBuscado->nombre << "\n-------------------------------------\n1- Gestionar estudiantes\n2- Gestionar profesores\n3- Gestionar cursos\n4- Agregar otro administrador\n0- Para salir\n-------------------------------------" << endl;
             cin >> opcion;
             switch(opcion){
                 case 1:
+                    system("cls");
                     menuGestion("Estudiantes");
                     break;
                 case 2:
+                    system("cls");
                     menuGestion("Profesores");
                     break;
                 case 3:
+                    system("cls");
                     menuGestion("Cursos");
                     break;
+                case 4:
+                    {
+                    system("cls");
+                    cout << "Ingrese el nombre del nuevo admin\n-------------------------------------" << endl;
+                    string nAdmin;
+                    cin >> nAdmin;
+                    system("cls");
+                    cout << "Ingrese el apellido del nuevo admin\n-------------------------------------" << endl;
+                    string aAdmin;
+                    cin >> aAdmin;
+                    system("cls");
+                    cout << "Ingrese la clave del nuevo admin\n-------------------------------------" << endl;
+                    int cAdmin;
+                    cin >> cAdmin;
+                    system("cls");
+                    insertarAdmin(nAdmin, aAdmin, cAdmin);
+                    }
+
                 case 0:
                     break;
                 default:
                     cout << "\nERROR: El valor no es valido\n" << endl;
+                    break;
                 }
             }
         break;
         }
     }
-    else{
+    else {
         system("cls");
         break;
     }
-
 }
-
  return;
 }
 
@@ -788,8 +954,9 @@ while (validacion != true){
             int opcion = -1;
             while (opcion != 0){
             system("cls");
-            cout << "\nBienvenid@ " << nodoBuscado->nombre << "\n-------------------------------------\n1- Consultar reuniones\n2- Consultar asitencia por reunion\n3- Consultar cuales estudiantes asistieron a todas las reuniones\n4- Consultar estudiantes con mas de 3 ausencias\n5- Consultar reuniones sin asistencia\n0- Para salir\n-------------------------------------" << endl;
+            cout << "\nBienvenid@ " << nodoBuscado->nombre << "\n-------------------------------------\n1- Consultar reuniones\n2- Consultar asitencia por reunion\n3- Consultar cuales estudiantes asistieron a todas las reuniones\n4- Consultar estudiantes con mas de 3 ausencias\n5- Consultar reuniones sin asistencia\n6- Crear reunion\n0- Para salir\n-------------------------------------" << endl;
             cin >> opcion;
+            system("cls");
             switch(opcion){
                 case 1:
                     //consultarReuniones(carnetP);
@@ -806,10 +973,43 @@ while (validacion != true){
                 case 5:
                     //consultarTresAusencias(carnetP);
                     break;
+                case 6:
+                    {
+                    imprimirCursosProfe(nodoBuscado->carnetProfesor);
+
+
+                    cout << "Ingrese el codigo del curso al que desea agregar la reunion\n-------------------------------------" << endl;
+                    string cCurso;
+                    cin >> cCurso;
+                    system("cls");
+
+                    //validacion para saber si el curso pertenece al profe
+
+                    cout << "Ingrese el codigo de la reunion\n-------------------------------------" << endl;
+                    int cReu;
+                    cin >> cReu;
+                    system("cls");
+                    cout << "Ingrese la fecha en formato dd/mm/aaaa\n-------------------------------------" << endl;
+                    string fechaReu;
+                    cin >> fechaReu;
+                    system("cls");
+                    cout << "Ingrese la hora de inicio en formato militar\n-------------------------------------" << endl;
+                    string horaI;
+                    cin >> horaI;
+                    system("cls");
+                    cout << "Ingrese la hora de fin en formato militar\n-------------------------------------" << endl;
+                    string horaF;
+                    cin >> horaF;
+                    system("cls");
+
+                    insertarReunion(cReu,fechaReu,horaI,horaF);
+                    break;
+                    }
                 case 0:
                     break;
                 default:
                     cout << "\nERROR: El valor no es valido\n" << endl;
+                    break;
                 }
             }
         break;
@@ -824,7 +1024,7 @@ while (validacion != true){
 return;
 }
 
-//menu que se muestra cuando se ingresa como usuario de tipo estudiante
+//menu que se muestra cuando se ingresa como usuario de tipo estudiante *FALTA*
 void menuEstu(){
 system("cls");
 int carnetE;
@@ -844,17 +1044,30 @@ while (validacion != true){
             int opcion = -1;
             while (opcion != 0){
             system("cls");
-            cout << "\nBienvenid@ " << nodoBuscado->nombre << "\n-------------------------------------\n1- Consultar reuniones de la semana\n0- Para salir\n-------------------------------------" << endl;
+            cout << "\nBienvenid@ " << nodoBuscado->nombre << "\n-------------------------------------\n1- Consultar reuniones de la semana\n2- Participar en una reunion\n0- Para salir\n-------------------------------------" << endl;
             cin >> opcion;
             switch(opcion){
                 case 1:
-                    //consultarReunionesSemana();
+                    //consultarReunionesSemana(); FALTAAAAAAAAAAAAAAAAAAAAAAA
                     break;
+                case 2:
+                    cout << "Ingrese el codigo del curso\n-------------------------------------" << endl;
+                    string codCur;
+                    cin >> codCur;
+                    system("cls");
 
+                    cout << "Ingrese el codigo de la reunion\n-------------------------------------" << endl;
+                    int codReu;
+                    cin >> codReu;
+                    system("cls");
+
+                    //participarReunion(codCur, codReu); FALTAAAAAAAAAAAAAAAAAAAAAAA
+                    break;
                 case 0:
                     break;
                 default:
                     cout << "\nERROR: El valor no es valido\n" << endl;
+                    break;
                 }
             }
         break;
@@ -895,6 +1108,7 @@ while (opcion != 0){
 return;
 }
 
+//llamado principal
 int main()
 {
     //cout << " --- profes --- " << endl;
@@ -928,10 +1142,10 @@ int main()
     //cout << endl << "cursos" << endl;
 
 
-    insertarFinalCurso("Estructuras", "E 100", 4);
-    insertarFinalCurso("POO", "P 3030", 3);
-    insertarFinalCurso("Comu Oral", "CO 1010", 2);
-    insertarFinalCurso("Taller", "T 5050", 4);
+    insertarFinalCurso("Estructuras", "E100", 4);
+    insertarFinalCurso("POO", "P303", 3);
+    insertarFinalCurso("Comu Oral", "C101", 2);
+    insertarFinalCurso("Taller", "T505", 4);
 
     imprimirCursos();
 
@@ -952,8 +1166,8 @@ int main()
 
     cout << endl << " --- Cursos de Estudiante --- " << endl;
 
-    insertarCursoEstudiante(2020,"T 5050");
-    insertarCursoEstudiante(2020,"P 3030");
+    insertarCursoEstudiante(2020,"T505");
+    insertarCursoEstudiante(2020,"P303");
     imprimirCursosEstudiante(2020);
 
     cout << endl << "cursos modificados" << endl;
@@ -967,7 +1181,7 @@ int main()
     insertarCursoProfesor(2021,"CO 1010");
     imprimirCursosProfe(2021);
 
-    //menu();
+    menu();
 
 }
 
