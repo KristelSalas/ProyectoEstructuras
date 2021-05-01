@@ -4,40 +4,59 @@
 	<ActiveTarget name="Debug" />
 	<File name="main.cpp" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="169" topLine="280" />
+			<Cursor1 position="45601" topLine="101" />
 		</Cursor>
 		<Folding>
-			<Collapse line="12" />
-			<Collapse line="60" />
-			<Collapse line="74" />
-			<Collapse line="116" />
-			<Collapse line="126" />
-			<Collapse line="141" />
-			<Collapse line="151" />
-			<Collapse line="166" />
-			<Collapse line="176" />
+			<Collapse line="13" />
+			<Collapse line="28" />
+			<Collapse line="47" />
+			<Collapse line="64" />
+			<Collapse line="79" />
+			<Collapse line="96" />
+			<Collapse line="109" />
+			<Collapse line="122" />
+			<Collapse line="133" />
+			<Collapse line="154" />
+			<Collapse line="164" />
+			<Collapse line="181" />
+			<Collapse line="191" />
+			<Collapse line="206" />
 			<Collapse line="216" />
-			<Collapse line="228" />
-			<Collapse line="240" />
-			<Collapse line="276" />
-			<Collapse line="296" />
-			<Collapse line="308" />
+			<Collapse line="246" />
+			<Collapse line="256" />
+			<Collapse line="268" />
+			<Collapse line="280" />
+			<Collapse line="305" />
+			<Collapse line="317" />
 			<Collapse line="337" />
-			<Collapse line="347" />
-			<Collapse line="373" />
-			<Collapse line="389" />
-			<Collapse line="435" />
-			<Collapse line="445" />
-			<Collapse line="453" />
-			<Collapse line="461" />
-			<Collapse line="473" />
-			<Collapse line="481" />
-			<Collapse line="496" />
-			<Collapse line="518" />
-			<Collapse line="719" />
-			<Collapse line="770" />
-			<Collapse line="827" />
-			<Collapse line="872" />
+			<Collapse line="349" />
+			<Collapse line="378" />
+			<Collapse line="388" />
+			<Collapse line="403" />
+			<Collapse line="420" />
+			<Collapse line="440" />
+			<Collapse line="464" />
+			<Collapse line="475" />
+			<Collapse line="488" />
+			<Collapse line="508" />
+			<Collapse line="532" />
+			<Collapse line="561" />
+			<Collapse line="593" />
+			<Collapse line="603" />
+			<Collapse line="611" />
+			<Collapse line="619" />
+			<Collapse line="631" />
+			<Collapse line="639" />
+			<Collapse line="654" />
+			<Collapse line="669" />
+			<Collapse line="689" />
+			<Collapse line="716" />
+			<Collapse line="1064" />
+			<Collapse line="1135" />
+			<Collapse line="1224" />
+			<Collapse line="1284" />
+			<Collapse line="1310" />
+			<Collapse line="1356" />
 		</Folding>
 	</File>
 </CodeBlocks_layout_file>
